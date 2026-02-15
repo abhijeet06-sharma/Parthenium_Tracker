@@ -208,13 +208,43 @@
                         <input type="file" id="photo-input" class="hidden" accept="image/*">
                         <label class="text-xs font-bold uppercase tracking-wider text-slate-400">Evidence
                             (Photo)</label>
-                        <div id="photo-dropzone"
-                            class="border-2 border-dashed border-primary/30 rounded-xl p-8 text-center hover:bg-primary/5 transition-colors cursor-pointer group">
-                            <span
-                                class="material-icons text-primary text-4xl mb-2 group-hover:scale-110 transition-transform">add_a_photo</span>
-                            <p class="text-sm font-medium">Click or drag photo here</p>
-                            <p class="text-[10px] text-slate-400 mt-1">JPEG, PNG up to 10MB</p>
+                        <div class="flex gap-2">
+                            <div id="photo-dropzone"
+                                class="flex-1 border-2 border-dashed border-primary/30 rounded-xl p-6 text-center hover:bg-primary/5 transition-colors cursor-pointer group flex flex-col items-center justify-center">
+                                <span
+                                    class="material-icons text-primary text-4xl mb-2 group-hover:scale-110 transition-transform">add_a_photo</span>
+                                <p class="text-xs font-medium text-slate-600 dark:text-slate-300">Upload Photo</p>
+                            </div>
+                            <button type="button" id="btn-open-camera"
+                                class="flex-1 border-2 border-dashed border-primary/30 rounded-xl p-6 text-center hover:bg-primary/5 transition-colors cursor-pointer group flex flex-col items-center justify-center">
+                                <span
+                                    class="material-icons text-primary text-4xl mb-2 group-hover:scale-110 transition-transform">photo_camera</span>
+                                <p class="text-xs font-medium text-slate-600 dark:text-slate-300">Take Photo</p>
+                            </button>
                         </div>
+                        <p class="text-[10px] text-slate-400 text-center">JPEG, PNG up to 10MB</p>
+                    </div>
+
+                    <!-- Camera Modal -->
+                    <div id="camera-modal"
+                        class="hidden fixed inset-0 z-[70] bg-black/90 flex flex-col items-center justify-center p-4">
+                        <div class="relative w-full max-w-lg bg-black rounded-2xl overflow-hidden shadow-2xl">
+                            <video id="camera-stream" autoplay playsinline
+                                class="w-full h-auto object-cover transform scale-x-[-1]"></video>
+                            <canvas id="camera-canvas" class="hidden"></canvas>
+
+                            <div class="absolute bottom-6 left-0 right-0 flex justify-center gap-6 z-10">
+                                <button type="button" id="btn-close-camera"
+                                    class="p-4 bg-white/20 backdrop-blur-md rounded-full text-white hover:bg-white/30 transition-all">
+                                    <span class="material-icons">close</span>
+                                </button>
+                                <button type="button" id="btn-capture-photo"
+                                    class="p-4 bg-white rounded-full text-primary border-4 border-primary/50 shadow-lg hover:scale-110 transition-all">
+                                    <span class="material-icons text-3xl">camera</span>
+                                </button>
+                            </div>
+                        </div>
+                        <p class="text-white/70 mt-4 text-sm">Align the plant within the frame</p>
                     </div>
                     <!-- Description -->
                     <div class="space-y-3">

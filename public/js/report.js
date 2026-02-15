@@ -9,25 +9,98 @@ let geocoder;
 document.addEventListener('DOMContentLoaded', async () => {
     initMap();
 
-    // Photo Input Trigger
+    // Photo Input Trigger & Camera Logic
     const dropzone = document.getElementById('photo-dropzone');
     const fileInput = document.getElementById('photo-input');
+    const openCameraBtn = document.getElementById('btn-open-camera');
+    const cameraModal = document.getElementById('camera-modal');
+    const cameraStream = document.getElementById('camera-stream');
+    const captureBtn = document.getElementById('btn-capture-photo');
+    const closeCameraBtn = document.getElementById('btn-close-camera');
+    const canvas = document.getElementById('camera-canvas');
+    let stream = null;
 
     if (dropzone && fileInput) {
         dropzone.addEventListener('click', () => fileInput.click());
 
         fileInput.addEventListener('change', (e) => {
             if (e.target.files && e.target.files[0]) {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    dropzone.style.backgroundImage = `url(${e.target.result})`;
-                    dropzone.style.backgroundSize = 'cover';
-                    dropzone.style.backgroundPosition = 'center';
-                    dropzone.innerHTML = ''; // Remove text/icon
-                };
-                reader.readAsDataURL(e.target.files[0]);
+                updatePhotoPreview(e.target.files[0]);
             }
         });
+    }
+
+    // Camera Features
+    if (openCameraBtn) {
+        openCameraBtn.addEventListener('click', async () => {
+            try {
+                stream = await navigator.mediaDevices.getUserMedia({
+                    video: { facingMode: 'environment' } // Prefer back camera
+                });
+                cameraStream.srcObject = stream;
+                cameraModal.classList.remove('hidden');
+            } catch (err) {
+                console.error("Camera access denied:", err);
+                alert("Could not access camera. Please check permissions.");
+            }
+        });
+    }
+
+    if (closeCameraBtn) {
+        closeCameraBtn.addEventListener('click', stopCamera);
+    }
+
+    if (captureBtn) {
+        captureBtn.addEventListener('click', () => {
+            if (!stream) return;
+
+            // Setup canvas matching video dimensions
+            canvas.width = cameraStream.videoWidth;
+            canvas.height = cameraStream.videoHeight;
+            const ctx = canvas.getContext('2d');
+
+            // Draw video frame to canvas
+            ctx.drawImage(cameraStream, 0, 0, canvas.width, canvas.height);
+
+            // Convert to Blob/File
+            canvas.toBlob((blob) => {
+                const file = new File([blob], "camera_capture.jpg", { type: "image/jpeg" });
+
+                // Update file input using DataTransfer
+                const dataTransfer = new DataTransfer();
+                dataTransfer.items.add(file);
+                fileInput.files = dataTransfer.files;
+
+                // Update preview
+                updatePhotoPreview(file);
+
+                // Close modal
+                stopCamera();
+            }, 'image/jpeg', 0.8);
+        });
+    }
+
+    function stopCamera() {
+        if (stream) {
+            stream.getTracks().forEach(track => track.stop());
+            stream = null;
+        }
+        cameraModal.classList.add('hidden');
+    }
+
+    function updatePhotoPreview(file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            // Update both dropzone and camera button to show selection
+            dropzone.style.backgroundImage = `url(${e.target.result})`;
+            dropzone.style.backgroundSize = 'cover';
+            dropzone.style.backgroundPosition = 'center';
+            dropzone.innerHTML = ''; // Remove text/icon
+
+            // Visual indicator on camera button too
+            openCameraBtn.innerHTML = '<span class="material-icons text-primary/50 text-4xl mb-2">check_circle</span><p class="text-xs font-bold text-primary">Photo Taken</p>';
+        };
+        reader.readAsDataURL(file);
     }
 
     // Locate Me Button
