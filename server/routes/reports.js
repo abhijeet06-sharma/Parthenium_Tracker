@@ -23,21 +23,58 @@ const authenticate = (req, res, next) => {
     }
 };
 
-// File Upload Setup
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, path.join(__dirname, '../../public/uploads/'));
-    },
-    filename: (req, file, cb) => {
-        cb(null, uuidv4() + path.extname(file.originalname));
-    }
-});
+const cloudinary = require('cloudinary').v2;
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
+const fs = require('fs'); // Ensure fs is required if not already
+
+// Cloudinary Configuration
+if (process.env.CLOUDINARY_CLOUD_NAME) {
+    cloudinary.config({
+        cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+        api_key: process.env.CLOUDINARY_API_KEY,
+        api_secret: process.env.CLOUDINARY_API_SECRET
+    });
+    console.log('Using Cloudinary for image storage');
+}
+
+// Storage Engine Selection
+let storage;
+if (process.env.CLOUDINARY_CLOUD_NAME) {
+    storage = new CloudinaryStorage({
+        cloudinary: cloudinary,
+        params: {
+            folder: 'parthenium-reports',
+            allowed_formats: ['jpg', 'jpeg', 'png'],
+        },
+    });
+} else {
+    console.log('Using local disk storage for images');
+    storage = multer.diskStorage({
+        destination: (req, file, cb) => {
+            cb(null, path.join(__dirname, '../../public/uploads/'));
+        },
+        filename: (req, file, cb) => {
+            cb(null, uuidv4() + path.extname(file.originalname));
+        }
+    });
+}
+
 const upload = multer({ storage });
 
 // Create Report
 router.post('/', authenticate, upload.single('image'), async (req, res) => {
     const { latitude, longitude, address, severity } = req.body;
-    const imageUrl = req.file ? `/uploads/${req.file.filename}` : null;
+
+    let imageUrl = null;
+    if (req.file) {
+        // If Cloudinary, verify path usage
+        if (req.file.path && req.file.path.startsWith('http')) {
+            imageUrl = req.file.path; // Cloudinary URL
+        } else {
+            imageUrl = `/uploads/${req.file.filename}`; // Local URL
+        }
+    }
+
     const reportId = uuidv4();
 
     try {
