@@ -13,7 +13,7 @@ An environmental monitoring application designed to track and report sightings o
 ## Tech Stack
 - **Frontend:** HTML5, Tailwind CSS, JavaScript
 - **Backend:** Node.js, Express
-- **Database:** SQLite (Note: Ephemeral on some PaaS like Render/Vercel)
+- **Database:** PostgreSQL (Production), SQLite (Local Dev)
 
 ## Local Setup
 

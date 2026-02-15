@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { db } = require('../db');
+const { query } = require('../db');
 const { v4: uuidv4 } = require('uuid');
 const multer = require('multer');
 const path = require('path');
@@ -35,17 +35,16 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 // Create Report
-router.post('/', authenticate, upload.single('image'), (req, res) => {
+router.post('/', authenticate, upload.single('image'), async (req, res) => {
     const { latitude, longitude, address, severity } = req.body;
     const imageUrl = req.file ? `/uploads/${req.file.filename}` : null;
     const reportId = uuidv4();
 
     try {
-        const stmt = db.prepare(`
+        await query(`
             INSERT INTO reports (id, user_id, latitude, longitude, address, severity, image_url, status)
             VALUES (?, ?, ?, ?, ?, ?, ?, 'PENDING')
-        `);
-        stmt.run(reportId, req.user.id, latitude, longitude, address, severity, imageUrl);
+        `, [reportId, req.user.id, latitude, longitude, address, severity, imageUrl]);
 
         res.status(201).json({ message: 'Report submitted successfully', reportId });
     } catch (err) {
@@ -55,23 +54,23 @@ router.post('/', authenticate, upload.single('image'), (req, res) => {
 });
 
 // Get User Reports
-router.get('/my', authenticate, (req, res) => {
+router.get('/my', authenticate, async (req, res) => {
     try {
-        const stmt = db.prepare('SELECT * FROM reports WHERE user_id = ? ORDER BY created_at DESC');
-        const reports = stmt.all(req.user.id);
-        res.json(reports);
+        const result = await query('SELECT * FROM reports WHERE user_id = ? ORDER BY created_at DESC', [req.user.id]);
+        res.json(result.rows);
     } catch (err) {
+        console.error(err);
         res.status(500).json({ error: 'Database error' });
     }
 });
 
 // Get All Reports (Admin/Public read-only potentially, but restricting to auth for now)
-router.get('/all', (req, res) => {
+router.get('/all', async (req, res) => {
     try {
-        const stmt = db.prepare('SELECT * FROM reports ORDER BY created_at DESC');
-        const reports = stmt.all();
-        res.json(reports);
+        const result = await query('SELECT * FROM reports ORDER BY created_at DESC');
+        res.json(result.rows);
     } catch (err) {
+        console.error(err);
         res.status(500).json({ error: 'Database error' });
     }
 });

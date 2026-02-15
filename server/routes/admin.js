@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { db } = require('../db');
+const { query } = require('../db');
 const jwt = require('jsonwebtoken');
 const { v4: uuidv4 } = require('uuid');
 
@@ -25,7 +25,7 @@ const adminAuth = (req, res, next) => {
 };
 
 // Update Report Status
-router.put('/reports/:id/:action', adminAuth, (req, res) => {
+router.put('/reports/:id/:action', adminAuth, async (req, res) => {
     const { id, action } = req.params; // action: verify, reject, resolve
     const { notes } = req.body;
 
@@ -39,15 +39,13 @@ router.put('/reports/:id/:action', adminAuth, (req, res) => {
     if (!newStatus) return res.status(400).json({ error: 'Invalid action' });
 
     try {
-        const updateStmt = db.prepare('UPDATE reports SET status = ?, admin_notes = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?');
-        const info = updateStmt.run(newStatus, notes, id);
+        const result = await query('UPDATE reports SET status = ?, admin_notes = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?', [newStatus, notes, id]);
 
-        if (info.changes === 0) return res.status(404).json({ error: 'Report not found' });
+        if (result.rowCount === 0) return res.status(404).json({ error: 'Report not found' });
 
         // Log action
         const logId = uuidv4();
-        const logStmt = db.prepare('INSERT INTO action_logs (id, report_id, admin_id, action) VALUES (?, ?, ?, ?)');
-        logStmt.run(logId, id, req.user.id, newStatus);
+        await query('INSERT INTO action_logs (id, report_id, admin_id, action) VALUES (?, ?, ?, ?)', [logId, id, req.user.id, newStatus]);
 
         res.json({ message: `Report ${action}ed successfully` });
     } catch (err) {
@@ -57,9 +55,9 @@ router.put('/reports/:id/:action', adminAuth, (req, res) => {
 });
 
 // Get Action Logs
-router.get('/logs', adminAuth, (req, res) => {
+router.get('/logs', adminAuth, async (req, res) => {
     try {
-        const stmt = db.prepare(`
+        const result = await query(`
             SELECT logs.id, logs.action, logs.timestamp, users.name as admin_name, reports.address 
             FROM action_logs as logs
             JOIN users ON logs.admin_id = users.id
@@ -67,8 +65,7 @@ router.get('/logs', adminAuth, (req, res) => {
             ORDER BY logs.timestamp DESC
             LIMIT 10
         `);
-        const logs = stmt.all();
-        res.json(logs);
+        res.json(result.rows);
     } catch (err) {
         console.error(err);
         res.status(500).json({ error: 'Database error' });
@@ -76,11 +73,10 @@ router.get('/logs', adminAuth, (req, res) => {
 });
 
 // Get All Users
-router.get('/users', adminAuth, (req, res) => {
+router.get('/users', adminAuth, async (req, res) => {
     try {
-        const stmt = db.prepare('SELECT id, name, email, role, created_at FROM users ORDER BY created_at DESC');
-        const users = stmt.all();
-        res.json(users);
+        const result = await query('SELECT id, name, email, role, created_at FROM users ORDER BY created_at DESC');
+        res.json(result.rows);
     } catch (err) {
         console.error(err);
         res.status(500).json({ error: 'Database error' });
@@ -88,11 +84,10 @@ router.get('/users', adminAuth, (req, res) => {
 });
 
 // Delete User
-router.delete('/users/:id', adminAuth, (req, res) => {
+router.delete('/users/:id', adminAuth, async (req, res) => {
     try {
-        const stmt = db.prepare('DELETE FROM users WHERE id = ?');
-        const info = stmt.run(req.params.id);
-        if (info.changes === 0) return res.status(404).json({ error: 'User not found' });
+        const result = await query('DELETE FROM users WHERE id = ?', [req.params.id]);
+        if (result.rowCount === 0) return res.status(404).json({ error: 'User not found' });
         res.json({ message: 'User deleted successfully' });
     } catch (err) {
         console.error(err);
@@ -101,15 +96,16 @@ router.delete('/users/:id', adminAuth, (req, res) => {
 });
 
 // Get Single Report Details
-router.get('/report/:id', adminAuth, (req, res) => {
+router.get('/report/:id', adminAuth, async (req, res) => {
     try {
-        const stmt = db.prepare(`
+        const result = await query(`
             SELECT reports.*, users.name as user_name, users.email as user_email
             FROM reports
             LEFT JOIN users ON reports.user_id = users.id
             WHERE reports.id = ?
-        `);
-        const report = stmt.get(req.params.id);
+        `, [req.params.id]);
+
+        const report = result.rows[0];
 
         if (!report) return res.status(404).json({ error: 'Report not found' });
         res.json(report);

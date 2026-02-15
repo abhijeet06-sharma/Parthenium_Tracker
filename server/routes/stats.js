@@ -1,29 +1,33 @@
 const express = require('express');
 const router = express.Router();
-const { db } = require('../db');
+const { query } = require('../db');
 
 // Get Public Stats
-router.get('/public', (req, res) => {
+router.get('/public', async (req, res) => {
     try {
         // Total Reports
-        const reportsCount = db.prepare('SELECT COUNT(*) as count FROM reports').get().count;
+        const reportsRes = await query('SELECT COUNT(*) as count FROM reports');
+        const reportsCount = reportsRes.rows[0].count;
 
         // "Communities" (Unique locations approx, or just random logic for now based on reports)
         // Let's count unique users as a proxy for community engagement
-        const usersCount = db.prepare("SELECT COUNT(*) as count FROM users WHERE role = 'USER'").get().count;
+        const usersRes = await query("SELECT COUNT(*) as count FROM users WHERE role = 'USER'");
+        const usersCount = usersRes.rows[0].count;
 
         // Resolved/Removed
-        const resolvedCount = db.prepare("SELECT COUNT(*) as count FROM reports WHERE status = 'RESOLVED'").get().count;
+        const resolvedRes = await query("SELECT COUNT(*) as count FROM reports WHERE status = 'RESOLVED'");
+        const resolvedCount = resolvedRes.rows[0].count;
 
         // Leaderboard
-        const leaderboard = db.prepare(`
+        const leaderboardRes = await query(`
             SELECT users.name, COUNT(reports.id) as report_count 
             FROM users 
             JOIN reports ON users.id = reports.user_id 
             GROUP BY users.id 
             ORDER BY report_count DESC 
             LIMIT 3
-        `).all();
+        `);
+        const leaderboard = leaderboardRes.rows;
 
         res.json({
             reports: reportsCount,

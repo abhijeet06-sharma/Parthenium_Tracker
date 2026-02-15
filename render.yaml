@@ -10,3 +10,13 @@ services:
         value: production
       - key: JWT_SECRET
         generateValue: true
+      - key: DATABASE_URL
+        fromDatabase:
+          name: parthenium-db
+          property: connectionString
+
+databases:
+  - name: parthenium-db
+    plan: free
+    databaseName: parthenium
+    user: parthenium_user
