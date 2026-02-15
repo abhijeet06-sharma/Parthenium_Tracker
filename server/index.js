@@ -56,9 +56,32 @@ app.get('/manual-seed-admin-fix', async (req, res) => {
 });
 
 // Error handling middleware
+app.use('/debug-cloudinary', async (req, res) => {
+    const cloudinary = require('cloudinary').v2;
+    if (!process.env.CLOUDINARY_CLOUD_NAME) {
+        return res.json({ status: 'Local Mode', message: 'Cloudinary not configured' });
+    }
+
+    try {
+        cloudinary.config({
+            cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+            api_key: process.env.CLOUDINARY_API_KEY,
+            api_secret: process.env.CLOUDINARY_API_SECRET
+        });
+
+        const result = await cloudinary.api.ping();
+        res.json({ status: 'Success', message: 'Connected to Cloudinary', result });
+    } catch (err) {
+        res.status(500).json({ status: 'Error', message: err.message, stack: err.stack });
+    }
+});
 app.use((err, req, res, next) => {
-    console.error(err.stack);
-    res.status(500).json({ error: 'Something went wrong!' });
+    console.error('SERVER ERROR:', err); // Log full error
+    // Send specific error message to client for debugging
+    res.status(500).json({
+        error: err.message || 'Something went wrong!',
+        details: process.env.NODE_ENV === 'development' ? err.stack : undefined
+    });
 });
 
 // Initialize Database and Start Server
