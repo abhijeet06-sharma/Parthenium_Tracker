@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Parthenium Tracker | User Dashboard</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#16a34a", // Fresh Leaf Green
+                        "primary-light": "#4ade80", // Spring Green
+                        "primary-dark": "#15803d", // Forest Green
+                        "background-light": "#f0fdf4", // Mint Tint
+                        "background-dark": "#022c22", // Deep Jungle
+                        "danger": "#ef4444",
+                        "neutral-sage": "#4a5d4e", // Kept for balance
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"],
+                        "body": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem", // Slightly rounder for friendliness
+                        "lg": "1rem",
+                        "xl": "1.5rem",
+                        "2xl": "2rem",
+                        "full": "9999px"
+                    },
+                    boxShadow: {
+                        'soft': '0 4px 20px -2px rgba(22, 163, 74, 0.1)', // Greenish tint
+                        'glow': '0 0 20px rgba(74, 222, 128, 0.4)', // Spring green glow
+                    }
+                },
+            },
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .custom-scroll::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .custom-scroll::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .custom-scroll::-webkit-scrollbar-thumb {
+            background: rgba(19, 236, 73, 0.2);
+            border-radius: 10px;
+        }
+    </style>
+</head>
+
+<body
+    class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen flex">
+    <!-- Left Sidebar Navigation -->
+    <aside
+        class="w-20 lg:w-64 border-r border-slate-200 dark:border-emerald-900/30 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl flex flex-col h-screen sticky top-0 transition-all duration-300 shadow-soft z-20">
+        <div class="p-6 flex items-center gap-4">
+            <div
+                class="w-12 h-12 bg-gradient-to-br from-primary to-primary-dark rounded-xl flex items-center justify-center text-white shadow-lg shadow-primary/30">
+                <span class="material-icons text-2xl">eco</span>
+            </div>
+            <span class="font-bold text-2xl hidden lg:block tracking-tight text-slate-800 dark:text-slate-100">Eco<span
+                    class="text-primary">Guard</span></span>
+        </div>
+        <nav class="flex-1 px-4 py-4 space-y-2">
+            <a id="nav-map"
+                class="nav-item flex items-center gap-4 p-3.5 rounded-xl bg-primary text-white shadow-lg shadow-primary/25 font-medium cursor-pointer transition-all hover:scale-[1.02]">
+                <span class="material-icons">map</span>
+                <span class="hidden lg:block">Map View</span>
+            </a>
+            <a id="nav-reports"
+                class="nav-item flex items-center gap-4 p-3 rounded-xl text-slate-500 hover:bg-slate-100 dark:hover:bg-emerald-900/40 transition-colors cursor-pointer">
+                <span class="material-icons">assignment</span>
+                <span class="hidden lg:block">My Reports</span>
+            </a>
+            <a id="nav-impact"
+                class="nav-item flex items-center gap-4 p-3 rounded-xl text-slate-500 hover:bg-slate-100 dark:hover:bg-emerald-900/40 transition-colors cursor-pointer">
+                <span class="material-icons">insights</span>
+                <span class="hidden lg:block">My Impact</span>
+            </a>
+            <a id="nav-education"
+                class="nav-item flex items-center gap-4 p-3 rounded-xl text-slate-500 hover:bg-slate-100 dark:hover:bg-emerald-900/40 transition-colors cursor-pointer">
+                <span class="material-icons">school</span>
+                <span class="hidden lg:block">Education</span>
+            </a>
+            <a id="nav-community"
+                class="nav-item flex items-center gap-4 p-3 rounded-xl text-slate-500 hover:bg-slate-100 dark:hover:bg-emerald-900/40 transition-colors cursor-pointer">
+                <span class="material-icons">groups</span>
+                <span class="hidden lg:block">Community</span>
+            </a>
+        </nav>
+        <div class="p-4 mt-auto">
+            <div class="p-4 mt-auto">
+                <div
+                    class="bg-gradient-to-br from-slate-50 to-white dark:from-slate-800 dark:to-slate-900 rounded-2xl p-5 hidden lg:block border border-slate-100 dark:border-slate-700 shadow-sm relative overflow-hidden group">
+                    <div
+                        class="absolute top-0 right-0 w-24 h-24 bg-primary/5 rounded-full -mr-10 -mt-10 blur-2xl group-hover:bg-primary/10 transition-all">
+                    </div>
+                    <p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Next Rank</p>
+                    <div class="flex items-center justify-between mb-2">
+                        <span id="rank-next-name" class="text-sm font-bold text-slate-700 dark:text-slate-200">Green
+                            Guardian</span>
+                        <span id="rank-next-percent" class="text-xs font-bold text-primary">0%</span>
+                    </div>
+                    <div class="w-full h-2 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
+                        <div id="rank-progress-bar"
+                            class="h-full bg-gradient-to-r from-primary to-primary-light rounded-full shadow-glow"
+                            style="width: 0%"></div>
+                    </div>
+                    <div class="mt-3 text-xs text-slate-500 text-center font-medium">
+                        <span id="rank-current-count" class="text-slate-800 dark:text-slate-200">0</span> / <span
+                            id="rank-next-target">5</span> Reports
+                    </div>
+                </div>
+                <button id="user-logout"
+                    class="w-full flex items-center gap-4 p-3 mt-4 rounded-xl text-slate-500 hover:bg-red-50 hover:text-red-500 transition-colors">
+                    <span class="material-icons text-red-400">logout</span>
+                    <span class="hidden lg:block">Logout</span>
+                </button>
+            </div>
+    </aside>
+    <!-- Main Content: Map Central View -->
+    <main class="flex-1 flex flex-col relative overflow-hidden h-screen">
+        <!-- Top Search Bar (Overlay) -->
+        <header class="absolute top-6 left-6 right-6 z-10 flex gap-4 pointer-events-none">
+            <div class="flex-1 max-w-xl pointer-events-auto">
+                <div class="relative group">
+                    <span
+                        class="material-icons absolute left-5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors">search</span>
+                    <input id="dashboard-search"
+                        class="w-full pl-14 pr-6 py-4 bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl border border-white/20 shadow-soft rounded-2xl focus:ring-4 focus:ring-primary/10 text-slate-800 dark:text-white outline-none transition-all placeholder:text-slate-400"
+                        placeholder="Search for location or reports..." type="text" />
+                </div>
+            </div>
+            <div class="pointer-events-auto">
+                <button
+                    class="p-4 bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl shadow-soft rounded-2xl text-slate-600 dark:text-slate-300 hover:text-primary transition-colors border border-white/20">
+                    <span class="material-icons">filter_list</span>
+                </button>
+            </div>
+        </header>
+        <!-- View: Map (Default) -->
+        <div id="view-map" class="view-section absolute inset-0">
+
+            <!-- Map Background Image (Visible while map loads) -->
+            <div class="absolute inset-0 z-0">
+                <img src="/images/map-original.jpg" alt="Topographic map background"
+                    class="w-full h-full object-cover opacity-60 dark:opacity-40 grayscale-[0.2]" />
+            </div>
+
+            <!-- Interactive Map Container (Removed to show static image) -->
+            <!-- <div id="map-container" class="absolute inset-0 z-0 bg-transparent"></div> -->
+
+            <!-- Floating Action Button -->
+            <!-- Floating Action Button -->
+            <a href="/report.html"
+                class="absolute bottom-10 left-1/2 -translate-x-1/2 z-10 flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-primary to-primary-light text-white font-bold tracking-wide rounded-full shadow-xl shadow-primary/40 hover:scale-105 hover:shadow-2xl hover:shadow-primary/50 active:scale-95 transition-all text-sm uppercase">
+                <span class="material-icons">add_location_alt</span>
+                Report Infestation
+            </a>
+
+        </div>
+
+
+        <!-- View: Education -->
+        <div id="view-education"
+            class="view-section hidden absolute inset-0 bg-slate-50 dark:bg-slate-900 p-8 overflow-y-auto">
+            <h2 class="text-3xl font-bold mb-6">Education Resources</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm">
+                    <h3 class="font-bold text-xl mb-3">Identifying Parthenium</h3>
+                    <p class="text-slate-600 dark:text-slate-400 mb-4">Learn how to distinguish Parthenium hysterophorus
+                        from look-alike plants.</p>
+                    <button class="text-primary font-bold">Read Guide</button>
+                </div>
+                <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm">
+                    <h3 class="font-bold text-xl mb-3">Safe Removal</h3>
+                    <p class="text-slate-600 dark:text-slate-400 mb-4">Safety protocols for removing infestations
+                        without spreading spores.</p>
+                    <button class="text-primary font-bold">Download PDF</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- View: Community -->
+        <div id="view-community"
+            class="view-section hidden absolute inset-0 bg-slate-50 dark:bg-slate-900 p-8 overflow-y-auto">
+            <h2 class="text-3xl font-bold mb-6">Community Hub</h2>
+            <p class="text-slate-500">Connect with other EcoGuardians in your area.</p>
+        </div>
+        <!-- View: My Reports -->
+        <div id="view-reports"
+            class="view-section hidden absolute inset-0 bg-slate-50 dark:bg-slate-900 p-8 overflow-y-auto">
+            <h2 class="text-3xl font-bold mb-6">My Reports</h2>
+            <div id="reports-list-container" class="space-y-4">
+                <p class="text-slate-500">Loading reports...</p>
+            </div>
+        </div>
+
+        <!-- View: Impact -->
+        <div id="view-impact"
+            class="view-section hidden absolute inset-0 bg-slate-50 dark:bg-slate-900 p-8 overflow-y-auto">
+            <h2 class="text-3xl font-bold mb-6">My Impact</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm text-center">
+                    <div class="text-4xl font-bold text-primary mb-2" id="impact-total">0</div>
+                    <div class="text-xs uppercase tracking-widest text-slate-500">Reports</div>
+                </div>
+                <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm text-center">
+                    <div class="text-4xl font-bold text-emerald-600 mb-2" id="impact-verified">0</div>
+                    <div class="text-xs uppercase tracking-widest text-slate-500">Verified</div>
+                </div>
+                <!-- More placeholders -->
+            </div>
+        </div>
+    </main>
+    <!-- Right Panel: Impact & Reports -->
+    <aside
+        class="w-96 border-l border-slate-200 dark:border-emerald-900/30 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl h-screen overflow-y-auto custom-scroll flex flex-col transition-all shadow-soft z-20">
+        <div class="p-8">
+            <h2 class="text-2xl font-bold mb-6 flex items-center gap-3 text-slate-800 dark:text-white">
+                My Impact <span class="material-icons text-primary text-3xl">auto_awesome</span>
+            </h2>
+            <!-- Stats Grid -->
+            <div class="grid grid-cols-2 gap-4 mb-8">
+                <div
+                    class="p-5 bg-gradient-to-br from-primary/5 to-primary/10 border border-primary/10 rounded-2xl relative overflow-hidden group">
+                    <div
+                        class="absolute top-0 right-0 w-16 h-16 bg-primary/10 rounded-full -mr-8 -mt-8 blur-xl transition-all group-hover:bg-primary/20">
+                    </div>
+                    <p class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Total Reports</p>
+                    <p id="total-reports" class="text-4xl font-black text-primary tracking-tight">52</p>
+                </div>
+                <div
+                    class="p-5 bg-gradient-to-br from-white to-slate-50 dark:from-slate-800 dark:to-slate-900 border border-slate-200 dark:border-slate-700 rounded-2xl relative overflow-hidden">
+                    <p class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Verified</p>
+                    <p id="verified-reports" class="text-4xl font-black text-slate-800 dark:text-white tracking-tight">
+                        12</p>
+                </div>
+            </div>
+            <!-- Badges Section -->
+            <div class="mb-10">
+                <div class="flex justify-between items-end mb-4">
+                    <h3 class="font-bold text-lg text-slate-800 dark:text-white">Badges Earned</h3>
+                    <a class="text-xs font-bold text-primary hover:text-primary-dark transition-colors" href="#">View
+                        All</a>
+                </div>
+                <div class="flex gap-4 overflow-x-auto pb-4 pt-2 -mx-2 px-2 custom-scroll">
+                    <div
+                        class="flex-shrink-0 w-16 h-16 bg-white dark:bg-slate-800 rounded-2xl flex items-center justify-center border border-slate-100 dark:border-slate-700 shadow-md group cursor-pointer hover:-translate-y-1 transition-transform duration-300 relative overflow-hidden">
+                        <div
+                            class="absolute inset-0 bg-gradient-to-br from-primary/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
+                        </div>
+                        <span
+                            class="material-icons text-primary text-3xl group-hover:scale-110 transition-transform">workspace_premium</span>
+                    </div>
+                    <div
+                        class="flex-shrink-0 w-16 h-16 bg-white dark:bg-slate-800 rounded-2xl flex items-center justify-center border border-slate-100 dark:border-slate-700 shadow-md group cursor-pointer hover:-translate-y-1 transition-transform duration-300 relative overflow-hidden">
+                        <div
+                            class="absolute inset-0 bg-gradient-to-br from-primary/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
+                        </div>
+                        <span
+                            class="material-icons text-primary text-3xl group-hover:scale-110 transition-transform">verified_user</span>
+                    </div>
+                    <div
+                        class="flex-shrink-0 w-16 h-16 bg-slate-50 dark:bg-slate-800/50 rounded-2xl flex items-center justify-center border border-slate-100 dark:border-slate-700 grayscale opacity-60 group cursor-pointer hover:opacity-100 hover:grayscale-0 transition-all">
+                        <span class="material-icons text-primary text-3xl">public</span>
+                    </div>
+                    <div
+                        class="flex-shrink-0 w-16 h-16 bg-slate-50 dark:bg-slate-800/50 rounded-2xl flex items-center justify-center border border-slate-100 dark:border-slate-700 grayscale opacity-60 group cursor-pointer hover:opacity-100 hover:grayscale-0 transition-all">
+                        <span class="material-icons text-primary text-3xl">nature_people</span>
+                    </div>
+                </div>
+                <p class="mt-4 text-sm font-bold text-primary flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+                    Green Hero Level 2 <span class="text-slate-400 font-normal ml-auto text-xs">earned 2d ago</span>
+                </p>
+            </div>
+            <!-- Recent Reports Feed -->
+            <div>
+                <h3 class="font-bold text-lg mb-4 text-slate-800 dark:text-white">Recent Activity</h3>
+                <div id="recent-activity" class="space-y-4">
+                    <p class="text-sm text-slate-500 italic">No recent reports found.</p>
+                </div>
+                <button
+                    class="w-full mt-6 py-4 border border-dashed border-slate-300 dark:border-slate-700 rounded-xl text-slate-500 text-sm font-bold hover:border-primary hover:text-primary hover:bg-primary/5 transition-all">
+                    Load More Activity
+                </button>
+            </div>
+        </div>
+    </aside>
+
+    <script>(g => { var h, a, k, p = "The Google Maps JavaScript API", c = "google", l = "importLibrary", q = "__ib__", m = document, b = window; b = b[c] || (b[c] = {}); var d = b.maps || (b.maps = {}), r = new Set, e = new URLSearchParams, u = () => h || (h = new Promise(async (f, n) => { await (a = m.createElement("script")); e.set("libraries", [...r] + ""); for (k in g) e.set(k.replace(/[A-Z]/g, t => "_" + t[0].toLowerCase()), g[k]); e.set("callback", c + ".maps." + q); a.src = `https://maps.${c}apis.com/maps/api/js?` + e; d[q] = f; a.onerror = () => h = n(Error(p + " could not load.")); a.nonce = m.querySelector("script[nonce]")?.nonce || ""; m.head.append(a) })); d[l] ? console.warn(p + " only loads once. Ignoring:", g) : d[l] = (f, ...n) => r.add(f) && u().then(() => d[l](f, ...n)) })({
+                key: "AIzaSyCG4rCImqhuC-1B3kmsJ60057GRg6jFZiI", // REPLACED WITH REAL KEY from admin.html
+                v: "weekly",
+            });</script>
+    <script src="/js/dashboard.js" defer></script>
+</body>
+
+</html>

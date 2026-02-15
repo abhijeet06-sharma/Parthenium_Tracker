@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Admin Verification Master Panel - Parthenium Tracker</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#16a34a", // Fresh Leaf Green
+                        "primary-light": "#4ade80", // Spring Green
+                        "primary-dark": "#15803d", // Forest Green
+                        "background-light": "#f0fdf4", // Mint Tint
+                        "background-dark": "#022c22", // Deep Jungle
+                        "danger": "#ef4444",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"],
+                        "body": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "lg": "1rem",
+                        "xl": "1.5rem",
+                        "2xl": "2rem",
+                        "full": "9999px"
+                    },
+                    boxShadow: {
+                        'soft': '0 4px 20px -2px rgba(22, 163, 74, 0.1)',
+                        'glow': '0 0 20px rgba(74, 222, 128, 0.4)',
+                    }
+                },
+            },
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .heatmap-gradient {
+            background: linear-gradient(90deg, #006A4E 0%, #facc15 50%, #ef4444 100%);
+        }
+    </style>
+</head>
+
+<body
+    class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display min-h-screen flex overflow-hidden">
+
+    <!-- Sidebar -->
+    <aside
+        class="w-64 border-r border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 flex flex-col fixed h-full z-10">
+        <div class="p-6 border-b border-slate-200 dark:border-slate-800 flex items-center gap-3">
+            <div
+                class="w-8 h-8 bg-gradient-to-br from-primary to-primary-dark rounded-lg flex items-center justify-center shadow-lg shadow-primary/20">
+                <span class="material-icons text-white text-lg">eco</span>
+            </div>
+            <h1 class="font-bold text-lg tracking-tight">BioGuard Tracker</h1>
+        </div>
+        <nav class="flex-1 p-4 space-y-2">
+            <a id="nav-dashboard"
+                class="nav-item flex items-center gap-4 p-3 rounded-xl bg-primary/10 text-primary-dark dark:text-primary font-bold cursor-pointer transition-colors border border-primary/5">
+                <span class="material-icons">dashboard</span>
+                <span class="hidden lg:block">Dashboard</span>
+            </a>
+            <a id="nav-users"
+                class="nav-item flex items-center gap-4 p-3 rounded-xl text-slate-500 hover:bg-slate-100 dark:hover:bg-emerald-900/40 transition-colors cursor-pointer">
+                <span class="material-icons">people</span>
+                <span class="hidden lg:block">User Management</span>
+            </a>
+            <a id="nav-settings"
+                class="nav-item flex items-center gap-4 p-3 rounded-xl text-slate-500 hover:bg-slate-100 dark:hover:bg-emerald-900/40 transition-colors cursor-pointer">
+                <span class="material-icons">settings</span>
+                <span class="hidden lg:block">Settings</span>
+            </a>
+        </nav>
+        <div class="p-4 border-t border-slate-200 dark:border-slate-800">
+            <div class="flex items-center gap-3 p-2">
+                <img class="w-10 h-10 rounded-full object-cover"
+                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuDdLEl-K-R9SQh_e6_jGKBqjZQ_kO68FRhrEewHTnnnmi1Y5w8bZ1K4I-gyeSg6ubY_ERma6IBBIXtRRFnu6VSU_jDsaQxnlLTyeZqBlFq79MUL2KNMoNgC7wPuR6CB54G_OGITK8e15hDDenOQSEGBHVC1_A2lG4o824a62SnOcWmcI3ai6zkPG7mfkvmp47zA_7L6m1cwqzbdQ9n41lUdzbNcnD9wF63lxqDzP2UOL4Qk0ttpYLi6xzvAfSbtRemvu7qTS9xFNy8" />
+                <div class="flex-1 overflow-hidden">
+                    <p class="text-sm font-semibold truncate">Admin User</p>
+                    <p class="text-xs text-slate-500 truncate">System Administrator</p>
+                </div>
+                <button id="admin-logout" class="text-slate-400 hover:text-slate-600 transition-colors">
+                    <span class="material-icons text-xl">logout</span>
+                </button>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content Wrapper -->
+    <main class="ml-64 flex-1 h-screen overflow-hidden bg-slate-50/50 dark:bg-black/20">
+
+        <!-- View: Dashboard -->
+        <div id="view-dashboard" class="view-section h-full overflow-y-auto custom-scroll p-8">
+            <!-- Header Section -->
+            <header class="flex justify-between items-end mb-8">
+                <div>
+                    <h2 class="text-3xl font-bold text-slate-900 dark:text-white">Verification Master Panel</h2>
+                    <p class="text-slate-500 mt-1">Global Parthenium density and verification oversight.</p>
+                </div>
+                <div class="flex gap-3">
+                    <div class="relative">
+                        <span
+                            class="material-icons absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">search</span>
+                        <input id="admin-search"
+                            class="pl-10 pr-4 py-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg text-sm focus:ring-primary focus:border-primary w-64 shadow-sm"
+                            placeholder="Search reports, locations..." type="text" />
+                    </div>
+                </div>
+            </header>
+
+            <!-- KPI Stats -->
+            <section class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                <div
+                    class="bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition-shadow">
+                    <p class="text-slate-500 text-xs font-semibold uppercase tracking-wider mb-2">Pending Verifications
+                    </p>
+                    <div class="flex items-end justify-between">
+                        <h3 id="stat-pending" class="text-2xl font-bold">...</h3>
+                        <span
+                            class="text-amber-500 text-sm font-medium flex items-center bg-amber-50 dark:bg-amber-900/20 px-2 py-0.5 rounded"><span
+                                class="material-icons text-sm mr-1">history</span>Pending</span>
+                    </div>
+                </div>
+                <div
+                    class="bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition-shadow">
+                    <p class="text-slate-500 text-xs font-semibold uppercase tracking-wider mb-2">Active Hotspots</p>
+                    <div class="flex items-end justify-between">
+                        <h3 id="stat-hotspots" class="text-2xl font-bold text-red-500">...</h3>
+                        <span
+                            class="text-red-500 text-sm font-medium flex items-center bg-red-50 dark:bg-red-900/20 px-2 py-0.5 rounded"><span
+                                class="material-icons text-sm mr-1">warning</span>Critical</span>
+                    </div>
+                </div>
+                <div
+                    class="bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition-shadow">
+                    <p class="text-slate-500 text-xs font-semibold uppercase tracking-wider mb-2">Total Cleared Areas
+                    </p>
+                    <div class="flex items-end justify-between">
+                        <h3 id="stat-cleared" class="text-2xl font-bold">... <span
+                                class="text-sm font-normal text-slate-400">Reports</span></h3>
+                        <span
+                            class="text-primary text-sm font-medium flex items-center bg-primary/10 px-2 py-0.5 rounded"><span
+                                class="material-icons text-sm mr-1">check_circle</span>Resolved</span>
+                    </div>
+                </div>
+                <div
+                    class="bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition-shadow">
+                    <p class="text-slate-500 text-xs font-semibold uppercase tracking-wider mb-2">Total Reports</p>
+                    <div class="flex items-end justify-between">
+                        <h3 id="stat-total" class="text-2xl font-bold">...</h3>
+                        <span
+                            class="text-slate-500 text-sm font-medium flex items-center bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded"><span
+                                class="material-icons text-sm mr-1">bar_chart</span>Total</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Main Dashboard Content Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Global Heatmap Section -->
+                <section class="lg:col-span-3">
+                    <div
+                        class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
+                        <div
+                            class="p-4 border-b border-slate-200 dark:border-slate-800 flex justify-between items-center">
+                            <div class="flex items-center gap-2">
+                                <span class="material-icons text-primary">public</span>
+                                <h3 class="font-bold uppercase text-xs tracking-widest text-slate-500">Live Density
+                                    Heatmap</h3>
+                            </div>
+                        </div>
+                        <div class="relative h-[400px] w-full bg-slate-100 dark:bg-slate-800 overflow-hidden">
+                            <div id="admin-map" class="absolute inset-0"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Verification Queue Table -->
+                <section class="lg:col-span-3">
+                    <div
+                        class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
+                        <div
+                            class="p-5 border-b border-slate-200 dark:border-slate-800 flex justify-between items-center bg-slate-50/50 dark:bg-slate-800/30">
+                            <h3 class="font-bold text-lg">Verification Queue</h3>
+                            <div class="flex gap-2">
+                                <span
+                                    class="px-3 py-1 bg-primary/20 text-emerald-800 dark:text-primary text-xs font-bold rounded-full uppercase">Live
+                                    Data</span>
+                            </div>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse">
+                                <thead>
+                                    <tr
+                                        class="bg-slate-50 dark:bg-slate-800/50 text-slate-500 text-xs font-bold uppercase tracking-wider border-b border-slate-200 dark:border-slate-800">
+                                        <th class="px-6 py-4">Report Info</th>
+                                        <th class="px-6 py-4">Evidence</th>
+                                        <th class="px-6 py-4">Location</th>
+                                        <th class="px-6 py-4">Severity</th>
+                                        <th class="px-6 py-4">Status</th>
+                                        <th class="px-6 py-4 text-right">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="verification-table-body"
+                                    class="divide-y divide-slate-100 dark:divide-slate-800">
+                                    <tr>
+                                        <td colspan="6" class="px-6 py-8 text-center text-slate-500">Loading reports...
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Bottom Section: Tasks and Activity -->
+            <section class="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8">
+                <div
+                    class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+                    <h4 class="font-bold mb-4">Verification Guidelines</h4>
+                    <div class="space-y-4">
+                        <div class="flex gap-3">
+                            <div
+                                class="w-6 h-6 rounded-full bg-primary/20 text-emerald-700 dark:text-primary flex items-center justify-center text-xs font-bold shrink-0">
+                                1</div>
+                            <p class="text-sm text-slate-600 dark:text-slate-400">Check for the characteristic serrated
+                                leaves and small white flower clusters.</p>
+                        </div>
+                        <div class="flex gap-3">
+                            <div
+                                class="w-6 h-6 rounded-full bg-primary/20 text-emerald-700 dark:text-primary flex items-center justify-center text-xs font-bold shrink-0">
+                                2</div>
+                            <p class="text-sm text-slate-600 dark:text-slate-400">Cross-reference location with known
+                                historical hotspots.</p>
+                        </div>
+                        <div class="flex gap-3">
+                            <div
+                                class="w-6 h-6 rounded-full bg-primary/20 text-emerald-700 dark:text-primary flex items-center justify-center text-xs font-bold shrink-0">
+                                3</div>
+                            <p class="text-sm text-slate-600 dark:text-slate-400">Reject blurry or ambiguous photos
+                                immediately.</p>
+                        </div>
+                    </div>
+                </div>
+                <div
+                    class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+                    <div class="flex justify-between items-center mb-4">
+                        <h4 class="font-bold">Recent Admin Activity</h4>
+                    </div>
+                    <div id="admin-activity-log" class="space-y-4">
+                        <p class="text-sm text-slate-500 italic">Loading activity...</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- View: User Management -->
+        <div id="view-users" class="view-section hidden h-full overflow-y-auto custom-scroll p-8">
+            <h1 class="text-3xl font-bold mb-6 text-slate-900 dark:text-white">User Management</h1>
+            <div
+                class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden shadow-sm">
+                <table class="w-full text-left">
+                    <thead class="bg-slate-50 dark:bg-slate-800/50 border-b border-slate-100 dark:border-slate-800">
+                        <tr>
+                            <th class="px-6 py-4 font-bold text-sm text-slate-500 uppercase tracking-widest">User</th>
+                            <th class="px-6 py-4 font-bold text-sm text-slate-500 uppercase tracking-widest">Role</th>
+                            <th class="px-6 py-4 font-bold text-sm text-slate-500 uppercase tracking-widest">Joined</th>
+                            <th class="px-6 py-4 font-bold text-sm text-slate-500 uppercase tracking-widest text-right">
+                                Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="users-table-body" class="divide-y divide-slate-100 dark:divide-slate-800">
+                        <tr>
+                            <td colspan="4" class="p-6 text-center text-slate-500">Loading users...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- View: Settings -->
+        <div id="view-settings" class="view-section hidden h-full overflow-y-auto custom-scroll p-8">
+            <h1 class="text-3xl font-bold mb-6 text-slate-900 dark:text-white">Settings</h1>
+            <div
+                class="max-w-2xl bg-white dark:bg-slate-900 p-8 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+                <form id="admin-settings-form" class="space-y-6">
+                    <div>
+                        <label class="block text-sm font-bold mb-2">Platform Name</label>
+                        <input type="text" value="BioGuard Tracker"
+                            class="w-full rounded-lg border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 p-2.5 focus:ring-primary focus:border-primary">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold mb-2">Notification Email</label>
+                        <input type="email" value="admin@bioguard.com"
+                            class="w-full rounded-lg border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 p-2.5 focus:ring-primary focus:border-primary">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold mb-2">New User Registration</label>
+                        <div class="flex items-center p-4 border border-slate-200 dark:border-slate-700 rounded-lg">
+                            <input type="checkbox" checked
+                                class="w-5 h-5 text-primary rounded border-slate-300 focus:ring-primary">
+                            <span class="ml-3 text-sm font-medium">Allow public registration</span>
+                        </div>
+                    </div>
+                    <div class="pt-4 border-t border-slate-100 dark:border-slate-800">
+                        <button type="submit"
+                            class="bg-primary text-emerald-900 px-6 py-3 rounded-xl font-bold hover:bg-opacity-90 transition-opacity">Save
+                            Changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <!-- Report Details Modal -->
+    <div id="report-modal"
+        class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 animate-fade-in">
+        <div
+            class="bg-white dark:bg-slate-900 w-full max-w-5xl rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+            <div
+                class="flex justify-between items-center p-6 border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/50">
+                <div>
+                    <h2 class="text-xl font-bold flex items-center gap-2">Report Details <span id="modal-status-badge"
+                            class="px-2 py-1 bg-slate-200 text-xs rounded-full">...</span></h2>
+                    <p class="text-xs text-slate-500 mt-1">Review validation criteria before action.</p>
+                </div>
+                <button id="close-modal"
+                    class="p-2 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-full transition-colors">
+                    <span class="material-icons">close</span>
+                </button>
+            </div>
+            <div class="flex-1 overflow-y-auto p-0 grid md:grid-cols-2">
+                <!-- Left: Visuals -->
+                <div
+                    class="bg-slate-100 dark:bg-black/40 p-6 flex flex-col gap-6 border-r border-slate-200 dark:border-slate-800">
+                    <div
+                        class="rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 bg-slate-200 dark:bg-slate-800 h-80 flex items-center justify-center relative group shadow-inner">
+                        <img id="modal-image" class="w-full h-full object-contain hidden" src="" alt="Evidence">
+                        <div id="modal-no-image" class="text-slate-400 flex flex-col items-center">
+                            <span class="material-icons text-5xl mb-2 opacity-50">image_not_supported</span>
+                            <span class="text-sm font-medium">No photo evidence provided</span>
+                        </div>
+                        <a id="modal-image-link" href="#" target="_blank"
+                            class="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity text-white font-bold gap-2">
+                            <span class="material-icons">open_in_new</span> View Original
+                        </a>
+                    </div>
+                    <div
+                        class="bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-xs font-bold uppercase text-slate-400 mb-1">GPS Coordinates</p>
+                                <p id="modal-coords" class="font-mono text-sm">...</p>
+                            </div>
+                            <a id="modal-map-link" href="#" target="_blank"
+                                class="text-primary hover:underline text-xs font-bold flex items-center gap-1">
+                                Google Maps <span class="material-icons text-[10px]">launch</span>
+                            </a>
+                        </div>
+                        <hr class="border-slate-100 dark:border-slate-700 my-3">
+                        <p class="text-xs font-bold uppercase text-slate-400 mb-1">Address</p>
+                        <p id="modal-address" class="text-sm font-medium">...</p>
+                    </div>
+                </div>
+                <!-- Right: Meta & Actions -->
+                <div class="p-8 flex flex-col h-full bg-white dark:bg-slate-900">
+                    <div class="flex-1 space-y-8">
+                        <div>
+                            <p class="text-xs font-bold uppercase text-slate-400 mb-3">Reporter Profile</p>
+                            <div class="flex items-center gap-4">
+                                <div
+                                    class="w-10 h-10 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center font-bold">
+                                    <span class="material-icons">person</span>
+                                </div>
+                                <div>
+                                    <p id="modal-reporter" class="font-bold text-slate-900 dark:text-white">...</p>
+                                    <p id="modal-email" class="text-sm text-slate-500">...</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <p class="text-xs font-bold uppercase text-slate-400 mb-2">Field Notes</p>
+                            <div
+                                class="p-4 bg-slate-50 dark:bg-slate-800/50 rounded-lg border border-slate-100 dark:border-slate-800">
+                                <p id="modal-notes" class="text-sm text-slate-700 dark:text-slate-300 italic">...</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 pt-8 border-t border-slate-100 dark:border-slate-800">
+                        <p class="text-xs font-bold uppercase text-slate-400 mb-4">Verification Actions</p>
+                        <div class="grid grid-cols-2 gap-4">
+                            <button id="btn-verify"
+                                class="flex flex-col items-center justify-center gap-1 py-4 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 border border-emerald-200 rounded-xl transition-all font-bold">
+                                <span class="material-icons">check_circle</span> Verify
+                            </button>
+                            <button id="btn-reject"
+                                class="flex flex-col items-center justify-center gap-1 py-4 bg-rose-50 text-rose-700 hover:bg-rose-100 border border-rose-200 rounded-xl transition-all font-bold">
+                                <span class="material-icons">cancel</span> Reject
+                            </button>
+                            <button id="btn-resolve"
+                                class="col-span-2 flex items-center justify-center gap-2 py-3 bg-blue-50 text-blue-700 hover:bg-blue-100 border border-blue-200 rounded-xl transition-all font-bold">
+                                <span class="material-icons">cleaning_services</span> Mark as Resolved / Cleared
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script>(g => { var h, a, k, p = "The Google Maps JavaScript API", c = "google", l = "importLibrary", q = "__ib__", m = document, b = window; b = b[c] || (b[c] = {}); var d = b.maps || (b.maps = {}), r = new Set, e = new URLSearchParams, u = () => h || (h = new Promise(async (f, n) => { await (a = m.createElement("script")); e.set("libraries", [...r] + ""); for (k in g) e.set(k.replace(/[A-Z]/g, t => "_" + t[0].toLowerCase()), g[k]); e.set("callback", c + ".maps." + q); a.src = `https://maps.${c}apis.com/maps/api/js?` + e; d[q] = f; a.onerror = () => h = n(Error(p + " could not load.")); a.nonce = m.querySelector("script[nonce]")?.nonce || ""; m.head.append(a) })); d[l] ? console.warn(p + " only loads once. Ignoring:", g) : d[l] = (f, ...n) => r.add(f) && u().then(() => d[l](f, ...n)) })({
+                key: "AIzaSyCG4rCImqhuC-1B3kmsJ60057GRg6jFZiI",
+                v: "weekly",
+            });</script>
+    <script src="/js/admin.js" defer></script>
+</body>
+
+</html>

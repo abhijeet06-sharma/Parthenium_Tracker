@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>Admin Login | Parthenium Tracking Platform</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap"
+    rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+    rel="stylesheet" />
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#16a34a", // Fresh Leaf Green
+            "primary-light": "#4ade80", // Spring Green
+            "primary-dark": "#15803d", // Forest Green
+            "background-light": "#f0fdf4", // Mint Tint
+            "background-dark": "#022c22", // Deep Jungle
+            "danger": "#ef4444",
+          },
+          fontFamily: {
+            "display": ["Inter", "sans-serif"],
+            "body": ["Inter", "sans-serif"]
+          },
+          borderRadius: {
+            "DEFAULT": "0.5rem",
+            "lg": "1rem",
+            "xl": "1.5rem",
+            "2xl": "2rem",
+            "full": "9999px"
+          },
+          boxShadow: {
+            'soft': '0 4px 20px -2px rgba(22, 163, 74, 0.1)',
+            'glow': '0 0 20px rgba(74, 222, 128, 0.4)',
+          }
+        },
+      },
+    }
+  </script>
+  <script src="/js/auth.js" defer></script>
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+
+    .glass-panel {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+  </style>
+</head>
+
+<body
+  class="bg-background-light dark:bg-background-dark font-display min-h-screen flex items-center justify-center p-0 m-0">
+  <div class="flex w-full min-h-screen">
+    <!-- Left Side: Branding and Visuals (Hidden on mobile) -->
+    <div class="hidden lg:flex lg:w-1/2 relative overflow-hidden bg-background-dark">
+      <div class="absolute inset-0 z-0">
+        <img class="w-full h-full object-cover opacity-60" data-alt="Restored lush green ecosystem and nature landscape"
+          src="https://lh3.googleusercontent.com/aida-public/AB6AXuAGh24bYFwcw1QbIcZDfzy-8dmBuj4dwNxwCdzpcHfHNB1K3aEvyeG1_QXEx7ZUwzP3FiHWi1Qp-BtmO3GK9llO_ijbl4GcxaMBrIayV682MBybdIALvpe3VzCgd729SyLNy8-qk7T03kD91T-v5R9RGVAqi1E_fzciYK_ydTVZ5OU4VD3ZBmilgqsro_Dhx509u8P-dWirkNaPsRF2TpDnCS1FYP7v7DGHM8Z4G8X7qUoG_e524oAo7qOyKgiIhnRDa8eHUaZfPao" />
+        <div class="absolute inset-0 bg-gradient-to-tr from-background-dark via-background-dark/40 to-transparent">
+        </div>
+      </div>
+      <div class="relative z-10 w-full p-16 flex flex-col justify-between">
+        <div>
+          <div class="flex items-center space-x-3 text-white mb-12">
+            <div
+              class="w-12 h-12 bg-white/10 backdrop-blur-md rounded-xl flex items-center justify-center border border-white/20 shadow-lg">
+              <span class="material-icons text-2xl">eco</span>
+            </div>
+            <span class="text-2xl font-bold tracking-tight">BioGuard Tracker</span>
+          </div>
+          <h1 class="text-5xl font-extrabold text-white leading-tight mb-6">
+            Protecting <span class="text-primary-light">Biodiversity</span> &amp; Public Health
+          </h1>
+          <p class="text-lg text-white/80 max-w-lg leading-relaxed">
+            Our mission is to monitor and control the invasive Parthenium plant through data-driven community action.
+            Admin tools provide high-level insights and management capabilities.
+          </p>
+        </div>
+        <div class="glass-panel p-6 rounded-xl max-w-md">
+          <div class="flex items-center space-x-4 mb-3">
+            <div class="p-2 bg-primary/20 rounded-lg">
+              <span class="material-icons text-primary">security</span>
+            </div>
+            <h3 class="text-white font-semibold">Security Level: Administrative</h3>
+          </div>
+          <p class="text-sm text-white/70">
+            This portal is exclusively for designated field coordinators and environmental analysts.
+          </p>
+        </div>
+      </div>
+    </div>
+    <!-- Right Side: Login Card -->
+    <div
+      class="w-full lg:w-1/2 flex items-center justify-center p-8 bg-background-light dark:bg-background-dark overflow-y-auto h-full">
+      <div class="w-full max-w-md">
+        <div class="mb-8 text-center lg:text-left">
+          <h2 class="text-3xl font-bold text-slate-900 dark:text-white mb-2">Welcome Back</h2>
+          <p class="text-slate-600 dark:text-slate-400">Access your account or report an issue.</p>
+        </div>
+
+        <!-- Main Role Tabs -->
+        <div class="flex border-b border-gray-200 dark:border-gray-700 mb-8">
+          <button id="tab-user"
+            class="flex-1 pb-4 text-center font-bold text-primary border-b-2 border-primary transition-colors focus:outline-none">
+            User Access
+          </button>
+          <button id="tab-admin"
+            class="flex-1 pb-4 text-center font-medium text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 transition-colors focus:outline-none">
+            Administrator
+          </button>
+        </div>
+
+        <!-- User Section -->
+        <div id="section-user" class="animate-fade-in">
+          <!-- User Action Toggle -->
+          <div class="bg-slate-100 dark:bg-slate-800 p-1 rounded-xl flex mb-6 shadow-inner">
+            <button id="btn-user-login"
+              class="flex-1 py-2.5 text-sm font-bold rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm transition-all">
+              Login
+            </button>
+            <button id="btn-user-signup"
+              class="flex-1 py-2.5 text-sm font-medium text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 transition-all">
+              Create Account
+            </button>
+          </div>
+
+          <!-- User Login Form -->
+          <form id="form-user-login" class="space-y-5">
+            <div>
+              <label class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5">Email Address</label>
+              <div class="relative group">
+                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                  <span
+                    class="material-icons text-slate-400 group-focus-within:text-primary transition-colors text-xl">email</span>
+                </div>
+                <input type="email" name="email" required
+                  class="w-full bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-xl pl-12 pr-4 py-3.5 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all font-medium"
+                  placeholder="user@example.com">
+              </div>
+            </div>
+            <div>
+              <label class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5">Password</label>
+              <div class="relative group">
+                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                  <span
+                    class="material-icons text-slate-400 group-focus-within:text-primary transition-colors text-xl">lock</span>
+                </div>
+                <input type="password" name="password" required
+                  class="w-full bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-xl pl-12 pr-4 py-3.5 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all font-medium"
+                  placeholder="••••••••">
+              </div>
+            </div>
+            <div class="flex justify-end">
+              <a href="#" class="text-xs font-bold text-primary hover:text-primary-dark transition-colors">Forgot
+                Password?</a>
+            </div>
+            <button type="submit"
+              class="w-full bg-primary text-white font-bold py-4 rounded-xl shadow-lg shadow-primary/30 hover:bg-primary-dark hover:-translate-y-0.5 active:scale-95 transition-all">
+              Login to Dashboard
+            </button>
+          </form>
+
+          <!-- User Signup Form (Hidden) -->
+          <form id="form-user-signup" class="space-y-4 hidden">
+            <div>
+              <label class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1">Full Name</label>
+              <input type="text" name="name" required
+                class="w-full bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 focus:ring-primary focus:border-primary transition-all"
+                placeholder="John Doe">
+            </div>
+            <div>
+              <label class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1">Email Address</label>
+              <input type="email" name="email" required
+                class="w-full bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 focus:ring-primary focus:border-primary transition-all"
+                placeholder="user@example.com">
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1">Password</label>
+                <input type="password" name="password" required
+                  class="w-full bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 focus:ring-primary focus:border-primary transition-all"
+                  placeholder="••••••••">
+              </div>
+              <div>
+                <label class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1">Confirm</label>
+                <input type="password" name="confirmPassword" required
+                  class="w-full bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 focus:ring-primary focus:border-primary transition-all"
+                  placeholder="••••••••">
+              </div>
+            </div>
+            <div class="flex items-center gap-2 mt-2">
+              <input type="checkbox" id="terms" required
+                class="rounded text-primary focus:ring-primary border-slate-300">
+              <label for="terms" class="text-xs text-slate-500">I agree to the <a href="#"
+                  class="text-primary hover:underline">Terms of Service</a> & <a href="#"
+                  class="text-primary hover:underline">Privacy Policy</a></label>
+            </div>
+            <button type="submit"
+              class="w-full bg-primary text-background-dark font-bold py-3.5 rounded-xl shadow-lg shadow-primary/20 hover:brightness-110 active:scale-95 transition-all">
+              Create Account
+            </button>
+          </form>
+        </div>
+
+        <!-- Admin Section (Hidden) -->
+        <div id="section-admin" class="hidden animate-fade-in">
+          <div
+            class="bg-amber-50 dark:bg-amber-900/10 border border-amber-200 dark:border-amber-900/30 p-4 rounded-xl mb-6 flex items-start gap-3">
+            <span class="material-icons text-amber-600 dark:text-amber-500 text-lg mt-0.5">security</span>
+            <p class="text-xs text-amber-800 dark:text-amber-400 font-medium leading-relaxed">
+              Restricted Area. All login attempts are logged and monitored. Unauthorized access is a punishable offense.
+            </p>
+          </div>
+
+          <form id="form-admin-login" class="space-y-5">
+            <div>
+              <label class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1">Admin ID / Email</label>
+              <div class="relative">
+                <span class="material-icons absolute left-3 top-3.5 text-slate-400 text-sm">badge</span>
+                <input type="text" name="email" required
+                  class="w-full bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-xl py-3 pl-10 pr-4 focus:ring-primary focus:border-primary transition-all font-mono text-sm"
+                  placeholder="admin@example.com">
+              </div>
+            </div>
+            <div>
+              <label class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1">Password</label>
+              <div class="relative">
+                <span class="material-icons absolute left-3 top-3.5 text-slate-400 text-sm">lock</span>
+                <input type="password" name="password" required
+                  class="w-full bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-xl py-3 pl-10 pr-4 focus:ring-primary focus:border-primary transition-all"
+                  placeholder="••••••••">
+              </div>
+            </div>
+            <div>
+              <label class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1">Security Code</label>
+              <div class="relative">
+                <span class="material-icons absolute left-3 top-3.5 text-slate-400 text-sm">vpn_key</span>
+                <input type="text" name="security-code"
+                  class="w-full bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-xl py-3 pl-10 pr-4 focus:ring-primary focus:border-primary transition-all tracking-widest font-mono"
+                  placeholder="PIN (Optional)">
+              </div>
+            </div>
+            <button type="submit"
+              class="w-full bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-bold py-3.5 rounded-xl shadow-lg hover:brightness-110 active:scale-95 transition-all">
+              Authenticate & Login
+            </button>
+          </form>
+        </div>
+
+        <div class="mt-8 pt-8 border-t border-slate-200 dark:border-slate-800 text-center">
+          <a href="/index.html"
+            class="inline-flex items-center text-sm font-medium text-slate-500 hover:text-primary transition-colors">
+            <span class="material-icons text-sm mr-2">arrow_back</span>
+            Back to Homepage
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>

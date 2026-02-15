@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>GreenWatch | Report Invasive Parthenium</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#16a34a", // Fresh Leaf Green
+                        "primary-light": "#4ade80", // Spring Green
+                        "primary-dark": "#15803d", // Forest Green
+                        "background-light": "#f0fdf4", // Mint Tint
+                        "background-dark": "#022c22", // Deep Jungle
+                        "danger": "#ef4444",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"],
+                        "body": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "lg": "1rem",
+                        "xl": "1.5rem",
+                        "2xl": "2rem",
+                        "full": "9999px"
+                    },
+                    boxShadow: {
+                        'soft': '0 4px 20px -2px rgba(22, 163, 74, 0.1)',
+                        'glow': '0 0 20px rgba(74, 222, 128, 0.4)',
+                    }
+                },
+            },
+        }
+    </script>
+</head>
+
+<body
+    class="font-display bg-background-light dark:bg-background-dark text-slate-800 dark:text-slate-100 min-h-screen overflow-hidden">
+    <!-- Header Navigation -->
+    <header
+        class="absolute top-0 left-0 right-0 z-50 bg-white/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-primary/10 px-6 py-4 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+            <div
+                class="w-10 h-10 bg-gradient-to-br from-primary to-primary-dark rounded-xl flex items-center justify-center shadow-lg shadow-primary/20">
+                <span class="material-icons text-white">eco</span>
+            </div>
+            <div>
+                <h1 class="font-bold text-xl tracking-tight leading-none text-slate-800 dark:text-white">BioGuard
+                    Tracker</h1>
+                <p class="text-[10px] uppercase tracking-widest text-primary font-bold">Invasive Species Monitor</p>
+            </div>
+        </div>
+        <nav class="hidden md:flex items-center gap-6">
+            <a class="text-sm font-medium hover:text-primary transition-colors" href="#">Dashboard</a>
+            <a class="text-sm font-bold text-primary border-b-2 border-primary" href="#">Report Plant</a>
+            <a class="text-sm font-medium hover:text-primary transition-colors" href="#">Community</a>
+            <a class="text-sm font-medium hover:text-primary transition-colors" href="#">Resources</a>
+        </nav>
+        <div class="flex items-center gap-4">
+            <button class="p-2 rounded-full hover:bg-primary/10 transition-colors">
+                <span class="material-icons text-slate-600 dark:text-slate-300">notifications</span>
+            </button>
+            <div class="w-10 h-10 rounded-full bg-primary/20 border-2 border-primary p-0.5">
+                <img class="w-full h-full rounded-full object-cover"
+                    data-alt="User profile picture of a community member"
+                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuDgQmOPDYgRM7tCkXro-TZ3uYjPdnAZlhu8LHKqEM__qCgUsiOk3wk07qokbCm1Y6P1rzB_WFxiRxd2WEkeAypPO1co9diRkPTKptRA0ToFpmUtr9eQxPq7vOTeOG0TJ3En7Q-Pj_wJXrfVt_Tlwvz1xN9b9Znw7eVwAzCou17eBfxLq1FzfwOhAzPd7dDmC9nWKeFhkx30udfuSK_uJGeL139ck25c229ZrvqkFyL6QOiTFEeNedGmlnxc5KssCpxny_ACv7Q3Ajw" />
+            </div>
+        </div>
+    </header>
+    <!-- Main Content Area (Map Background) -->
+    <main class="relative w-full h-screen pt-20">
+        <!-- Interactive Map Background -->
+        <div class="absolute inset-0 z-0">
+            <div id="report-map" class="relative w-full h-full bg-slate-200 dark:bg-slate-900">
+                <!-- Map UI Elements -->
+                <div class="absolute inset-0 pointer-events-none">
+                    <!-- Centered Target Crosshair -->
+                    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none">
+                        <div class="relative flex items-center justify-center">
+                            <div class="w-12 h-12 border-2 border-primary rounded-full animate-pulse"></div>
+                            <span class="material-icons text-primary absolute text-4xl">add</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- Map Controls -->
+                <div class="absolute bottom-10 left-6 flex flex-col gap-2">
+                    <button id="btn-locate-me"
+                        class="bg-white dark:bg-slate-800 p-3 rounded-xl shadow-xl hover:bg-primary/10 transition-colors group">
+                        <span
+                            class="material-icons text-slate-600 dark:text-slate-300 group-hover:text-primary">my_location</span>
+                    </button>
+                    <div class="flex flex-col bg-white dark:bg-slate-800 rounded-xl shadow-xl overflow-hidden">
+                        <button class="p-3 border-b border-slate-100 dark:border-slate-700 hover:bg-primary/10 group">
+                            <span
+                                class="material-icons text-slate-600 dark:text-slate-300 group-hover:text-primary">add</span>
+                        </button>
+                        <button class="p-3 hover:bg-primary/10 group">
+                            <span
+                                class="material-icons text-slate-600 dark:text-slate-300 group-hover:text-primary">remove</span>
+                        </button>
+                    </div>
+                </div>
+                <!-- Floating Instruction Toast -->
+                <div
+                    class="absolute top-6 left-1/2 -translate-x-1/2 bg-white/90 dark:bg-background-dark/90 backdrop-blur-md px-6 py-3 rounded-full shadow-2xl border border-primary/20 flex items-center gap-3">
+                    <span class="material-icons text-primary">touch_app</span>
+                    <p class="text-sm font-medium">Pan map to center the plant and fill details</p>
+                </div>
+            </div>
+        </div>
+        <!-- Slide-over Side Panel -->
+        <aside
+            class="absolute right-0 top-0 h-full w-full max-w-md bg-white dark:bg-background-dark shadow-2xl z-40 border-l border-primary/10 flex flex-col transform transition-transform duration-300 overflow-y-auto">
+            <div class="p-8">
+                <div class="flex items-center justify-between mb-8">
+                    <h2 class="text-2xl font-bold">New Report</h2>
+                    <button class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+                        <span class="material-icons">close</span>
+                    </button>
+                </div>
+                <!-- Education Toggle -->
+                <div class="mb-8 p-4 bg-primary/10 rounded-xl border border-primary/20">
+                    <details class="group">
+                        <summary class="flex items-center justify-between cursor-pointer list-none">
+                            <div class="flex items-center gap-2">
+                                <span class="material-icons text-primary text-xl">info</span>
+                                <span class="font-semibold text-sm">Why Reporting Matters</span>
+                            </div>
+                            <span
+                                class="material-icons text-primary group-open:rotate-180 transition-transform">expand_more</span>
+                        </summary>
+                        <div
+                            class="mt-4 text-sm space-y-3 text-slate-600 dark:text-slate-400 bg-white dark:bg-slate-900/50 p-4 rounded-lg">
+                            <p>Parthenium (Carrot Grass) is highly invasive and poses significant risks:</p>
+                            <ul class="list-disc pl-4 space-y-1 marker:text-danger">
+                                <li>Causes severe skin allergies and respiratory issues.</li>
+                                <li>Reduces agricultural crop yields by up to 40%.</li>
+                                <li>Displaces native biodiversity and harms livestock.</li>
+                            </ul>
+                            <p class="font-bold text-primary flex items-center gap-2">
+                                <span class="material-icons text-sm">verified_user</span>
+                                Your report helps coordinate rapid removal.
+                            </p>
+                        </div>
+                    </details>
+                </div>
+                <!-- Reporting Form -->
+                <form id="report-form" class="space-y-6">
+                    <!-- Location Readout -->
+                    <div class="space-y-2">
+                        <label class="text-xs font-bold uppercase tracking-wider text-slate-400">Selected
+                            Location</label>
+                        <div
+                            class="flex items-center gap-3 bg-slate-50 dark:bg-slate-900/50 p-4 rounded-xl border border-slate-100 dark:border-slate-800">
+                            <span class="material-icons text-primary">location_on</span>
+                            <div>
+                                <p id="selected-coords" class="text-sm font-medium">Fetching location...</p>
+                                <p id="selected-address" class="text-xs text-slate-500">Tap on map to select</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Severity Selector -->
+                    <div class="space-y-3">
+                        <label class="text-xs font-bold uppercase tracking-wider text-slate-400">Infestation
+                            Severity</label>
+                        <div class="grid grid-cols-3 gap-3">
+                            <label class="relative cursor-pointer">
+                                <input checked="" class="sr-only peer" name="severity" type="radio" value="low" />
+                                <div
+                                    class="p-3 text-center rounded-xl border-2 border-slate-100 dark:border-slate-800 peer-checked:border-primary peer-checked:bg-primary/5 transition-all">
+                                    <div class="w-2 h-2 rounded-full bg-primary mx-auto mb-1"></div>
+                                    <span class="text-xs font-bold">Low</span>
+                                </div>
+                            </label>
+                            <label class="relative cursor-pointer">
+                                <input class="sr-only peer" name="severity" type="radio" value="medium" />
+                                <div
+                                    class="p-3 text-center rounded-xl border-2 border-slate-100 dark:border-slate-800 peer-checked:border-amber-500 peer-checked:bg-amber-500/5 transition-all">
+                                    <div class="w-2 h-2 rounded-full bg-amber-500 mx-auto mb-1"></div>
+                                    <span class="text-xs font-bold">Medium</span>
+                                </div>
+                            </label>
+                            <label class="relative cursor-pointer">
+                                <input class="sr-only peer" name="severity" type="radio" value="high" />
+                                <div
+                                    class="p-3 text-center rounded-xl border-2 border-slate-100 dark:border-slate-800 peer-checked:border-red-500 peer-checked:bg-red-500/5 transition-all">
+                                    <div class="w-2 h-2 rounded-full bg-red-500 mx-auto mb-1"></div>
+                                    <span class="text-xs font-bold">High</span>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                    <!-- Photo Upload -->
+                    <div class="space-y-3">
+                        <input type="file" id="photo-input" class="hidden" accept="image/*">
+                        <label class="text-xs font-bold uppercase tracking-wider text-slate-400">Evidence
+                            (Photo)</label>
+                        <div id="photo-dropzone"
+                            class="border-2 border-dashed border-primary/30 rounded-xl p-8 text-center hover:bg-primary/5 transition-colors cursor-pointer group">
+                            <span
+                                class="material-icons text-primary text-4xl mb-2 group-hover:scale-110 transition-transform">add_a_photo</span>
+                            <p class="text-sm font-medium">Click or drag photo here</p>
+                            <p class="text-[10px] text-slate-400 mt-1">JPEG, PNG up to 10MB</p>
+                        </div>
+                    </div>
+                    <!-- Description -->
+                    <div class="space-y-3">
+                        <label class="text-xs font-bold uppercase tracking-wider text-slate-400">Additional
+                            Details</label>
+                        <textarea
+                            class="w-full bg-slate-50 dark:bg-slate-900/50 border-slate-100 dark:border-slate-800 rounded-xl focus:ring-primary focus:border-primary text-sm"
+                            placeholder="Mention land type (roadside, vacant plot, garden) or specific accessibility notes..."
+                            rows="3"></textarea>
+                    </div>
+                    <!-- Submit Button -->
+                    <button
+                        class="w-full bg-primary hover:bg-primary-dark text-white font-bold py-4 rounded-xl shadow-lg shadow-primary/30 flex items-center justify-center gap-2 transition-all transform hover:-translate-y-0.5 active:scale-95 group"
+                        type="submit">
+                        <span class="material-icons group-hover:translate-x-1 transition-transform">send</span>
+                        Submit Report
+                    </button>
+                    <!-- Success State (Hidden initially) -->
+                    <div class="hidden flex flex-col items-center justify-center py-6 animate-fade-in">
+                        <div class="w-16 h-16 bg-primary rounded-full flex items-center justify-center mb-4">
+                            <span class="material-icons text-white text-4xl">check</span>
+                        </div>
+                        <h3 class="font-bold text-lg">Report Submitted!</h3>
+                        <p class="text-sm text-slate-500 text-center">Thank you for protecting your community.</p>
+                    </div>
+                </form>
+            </div>
+            <!-- Footer Branding -->
+            <div
+                class="mt-auto p-8 pt-0 flex items-center justify-center gap-2 opacity-30 grayscale pointer-events-none">
+                <span class="material-icons text-xs">public</span>
+                <span class="text-[10px] font-bold tracking-[0.2em] uppercase">Global Biodiversity Watch</span>
+            </div>
+        </aside>
+    </main>
+    <!-- Success Modal Over Map (Secondary Option) -->
+    <div class="hidden fixed inset-0 z-[60] flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">
+        <div
+            class="bg-white dark:bg-background-dark rounded-2xl p-8 max-w-sm w-full text-center shadow-2xl border border-primary/20">
+            <div class="w-20 h-20 bg-primary/20 rounded-full flex items-center justify-center mx-auto mb-6">
+                <span class="material-icons text-primary text-5xl">verified</span>
+            </div>
+            <h2 class="text-2xl font-bold mb-2">Great Job!</h2>
+            <p class="text-slate-600 dark:text-slate-400 mb-6">Your report has been logged. Our response team will
+                review the location within 24 hours.</p>
+            <button class="w-full bg-primary text-background-dark font-bold py-3 rounded-xl">View My Reports</button>
+        </div>
+    </div>
+    </div>
+    </div>
+    <script>(g => { var h, a, k, p = "The Google Maps JavaScript API", c = "google", l = "importLibrary", q = "__ib__", m = document, b = window; b = b[c] || (b[c] = {}); var d = b.maps || (b.maps = {}), r = new Set, e = new URLSearchParams, u = () => h || (h = new Promise(async (f, n) => { await (a = m.createElement("script")); e.set("libraries", [...r] + ""); for (k in g) e.set(k.replace(/[A-Z]/g, t => "_" + t[0].toLowerCase()), g[k]); e.set("callback", c + ".maps." + q); a.src = `https://maps.${c}apis.com/maps/api/js?` + e; d[q] = f; a.onerror = () => h = n(Error(p + " could not load.")); a.nonce = m.querySelector("script[nonce]")?.nonce || ""; m.head.append(a) })); d[l] ? console.warn(p + " only loads once. Ignoring:", g) : d[l] = (f, ...n) => r.add(f) && u().then(() => d[l](f, ...n)) })({
+                key: "AIzaSyCG4rCImqhuC-1B3kmsJ60057GRg6jFZiI", // REPLACE WITH REAL KEY
+                v: "weekly",
+            });</script>
+    <script src="/js/report.js" defer></script>
+</body>
+
+</html>
