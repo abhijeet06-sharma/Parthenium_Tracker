@@ -1,28 +1,34 @@
-const { db, initDb } = require('./db');
+const { query, initDb } = require('./db');
 const bcrypt = require('bcryptjs');
 const { v4: uuidv4 } = require('uuid');
 
-initDb();
-
 async function seedAdmin() {
+    await initDb();
+
     const email = 'admin@example.com';
     const password = 'admin';
     const name = 'Master Admin';
 
-    // Check if exists
-    const existing = db.prepare('SELECT * FROM users WHERE email = ?').get(email);
-    if (existing) {
-        console.log('Admin already exists');
-        return;
+    try {
+        // Check if exists
+        const result = await query('SELECT * FROM users WHERE email = ?', [email]);
+        if (result.rows.length > 0) {
+            console.log('Admin already exists');
+            return;
+        }
+
+        const hashedPassword = await bcrypt.hash(password, 10);
+        const id = uuidv4();
+
+        await query('INSERT INTO users (id, name, email, password_hash, role, trust_score) VALUES (?, ?, ?, ?, ?, ?)',
+            [id, name, email, hashedPassword, 'ADMIN', 100]);
+
+        console.log(`Admin created: ${email} / ${password}`);
+    } catch (err) {
+        console.error('Error seeding admin:', err);
+    } finally {
+        process.exit(0);
     }
-
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const id = uuidv4();
-
-    db.prepare('INSERT INTO users (id, name, email, password_hash, role, trust_score) VALUES (?, ?, ?, ?, ?, ?)')
-        .run(id, name, email, hashedPassword, 'ADMIN', 100);
-
-    console.log(`Admin created: ${email} / ${password}`);
 }
 
 seedAdmin();
