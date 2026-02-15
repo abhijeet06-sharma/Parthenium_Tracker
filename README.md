@@ -42,3 +42,16 @@ You can deploy this application securely to Render with one click:
 [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/abhijeet06-sharma/Parthenium_Tracker)
 
 **Note:** On Render's free tier, the SQLite database file will be reset on every deployment. For persistent data, consider using a managed database service like Render PostgreSQL or Turso.
+
+## Cloud Configuration (Optional)
+
+### Persistent Images (Cloudinary)
+By default, uploaded images are stored locally and will be lost on Render restarts. To enable persistent storage:
+1.  Create a free account at [Cloudinary](https://cloudinary.com/).
+2.  Get your `Cloud Name`, `API Key`, and `API Secret` from the dashboard.
+3.  In Render Dashboard, go to **Environment** settings.
+4.  Add the following environment variables:
+    - `CLOUDINARY_CLOUD_NAME`
+    - `CLOUDINARY_API_KEY`
+    - `CLOUDINARY_API_SECRET`
+5.  Redeploy. The app will automatically switch to Cloudinary storage.
