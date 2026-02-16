@@ -30,20 +30,18 @@ document.addEventListener('DOMContentLoaded', async () => {
 function setupInstallPrompt() {
     const installBtn = document.getElementById('nav-install');
 
-    window.addEventListener('beforeinstallprompt', (e) => {
-        // Prevent Chrome 67 and earlier from automatically showing the prompt
-        e.preventDefault();
-        // Stash the event so it can be triggered later.
-        deferredPrompt = e;
-        // Update UI to notify the user they can add to home screen
-        if (installBtn) {
-            installBtn.classList.remove('hidden');
-            installBtn.classList.add('flex');
+    // Check if app is already installed
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
 
-            installBtn.addEventListener('click', () => {
-                // Show the prompt
+    // Always show button on mobile/tablet if not installed
+    if (installBtn && !isStandalone) {
+        installBtn.classList.remove('hidden');
+        installBtn.classList.add('flex');
+
+        installBtn.addEventListener('click', () => {
+            if (deferredPrompt) {
+                // Show the native prompt
                 deferredPrompt.prompt();
-                // Wait for the user to respond to the prompt
                 deferredPrompt.userChoice.then((choiceResult) => {
                     if (choiceResult.outcome === 'accepted') {
                         console.log('User accepted the A2HS prompt');
@@ -51,11 +49,19 @@ function setupInstallPrompt() {
                         console.log('User dismissed the A2HS prompt');
                     }
                     deferredPrompt = null;
-                    installBtn.classList.add('hidden');
-                    installBtn.classList.remove('flex');
                 });
-            });
-        }
+            } else {
+                // Manual Instructions
+                alert("To install the app:\n\n1. Tap the Share icon (iOS) or Menu icon (Android)\n2. Select 'Add to Home Screen'");
+            }
+        });
+    }
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+        // Prevent Chrome 67 and earlier from automatically showing the prompt
+        e.preventDefault();
+        // Stash the event so it can be triggered later.
+        deferredPrompt = e;
     });
 
     // Optionally handle appinstalled event
@@ -63,6 +69,13 @@ function setupInstallPrompt() {
         console.log('PWA was installed');
         if (installBtn) installBtn.classList.add('hidden');
     });
+}
+
+// Optionally handle appinstalled event
+window.addEventListener('appinstalled', () => {
+    console.log('PWA was installed');
+    if (installBtn) installBtn.classList.add('hidden');
+});
 }
 
 function setupLogout() {
