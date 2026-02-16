@@ -1,4 +1,4 @@
-const CACHE_NAME = 'bioguard-v1';
+const CACHE_NAME = 'bioguard-v3';
 const ASSETS = [
     '/',
     '/index.html',
