@@ -80,7 +80,7 @@
     class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen flex">
     <!-- Left Sidebar Navigation -->
     <aside id="sidebar"
-        class="fixed inset-y-0 left-0 z-50 w-64 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 border-r border-slate-200 dark:border-emerald-900/30 bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl flex flex-col h-screen shadow-2xl lg:shadow-soft lg:sticky lg:top-0">
+        class="fixed inset-y-0 left-0 z-50 w-64 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 border-r border-slate-200 dark:border-emerald-900/30 bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl flex flex-col h-[100dvh] shadow-2xl lg:shadow-soft lg:sticky lg:top-0">
         <div class="absolute top-4 right-4 lg:hidden">
             <button id="sidebar-close-btn"
                 class="p-2 text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-white">
@@ -153,7 +153,7 @@
             </div>
     </aside>
     <!-- Main Content: Map Central View -->
-    <main class="flex-1 flex flex-col relative overflow-hidden h-screen">
+    <main class="flex-1 flex flex-col relative overflow-hidden h-[100dvh]">
         <!-- Top Search Bar (Overlay) -->
         <header class="absolute top-6 left-6 right-6 z-10 flex gap-4 pointer-events-none">
             <div class="flex-1 max-w-xl pointer-events-auto">
@@ -231,28 +231,43 @@
             <div id="reports-list-container" class="space-y-4">
                 <p class="text-slate-500">Loading reports...</p>
             </div>
+            <!-- Mobile Activity Feed (Since sidebar is hidden) -->
+            <div class="mt-8 lg:hidden">
+                <h3 class="font-bold text-lg mb-4 text-slate-800 dark:text-white">Recent Activity</h3>
+                <div id="recent-activity-mobile" class="space-y-4">
+                    <p class="text-sm text-slate-500 italic">No recent reports found.</p>
+                </div>
+            </div>
         </div>
 
         <!-- View: Impact -->
         <div id="view-impact"
             class="view-section hidden absolute inset-0 bg-slate-50 dark:bg-slate-900 p-8 overflow-y-auto">
             <h2 class="text-3xl font-bold mb-6">My Impact</h2>
+
+            <!-- Mobile Stats Cards (Mirrors sidebar content) -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                <div
+                    class="bg-gradient-to-br from-primary/5 to-primary/10 border border-primary/10 rounded-2xl p-6 relative overflow-hidden group">
+                    <p class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Total Reports</p>
+                    <p id="impact-total-mobile" class="text-4xl font-black text-primary tracking-tight">0</p>
+                </div>
+                <div
+                    class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-6 relative overflow-hidden shadow-sm">
+                    <p class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Verified</p>
+                    <p id="impact-verified-mobile"
+                        class="text-4xl font-black text-slate-800 dark:text-white tracking-tight">0</p>
+                </div>
+            </div>
+
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm text-center">
-                    <div class="text-4xl font-bold text-primary mb-2" id="impact-total">0</div>
-                    <div class="text-xs uppercase tracking-widest text-slate-500">Reports</div>
-                </div>
-                <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm text-center">
-                    <div class="text-4xl font-bold text-emerald-600 mb-2" id="impact-verified">0</div>
-                    <div class="text-xs uppercase tracking-widest text-slate-500">Verified</div>
-                </div>
-                <!-- More placeholders -->
+                <!-- Additional placeholder stats can go here -->
             </div>
         </div>
     </main>
     <!-- Right Panel: Impact & Reports -->
     <aside
-        class="w-96 border-l border-slate-200 dark:border-emerald-900/30 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl h-screen overflow-y-auto custom-scroll flex flex-col transition-all shadow-soft z-20">
+        class="hidden lg:flex w-96 border-l border-slate-200 dark:border-emerald-900/30 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl h-[100dvh] overflow-y-auto custom-scroll flex-col transition-all shadow-soft z-20">
         <div class="p-8">
             <h2 class="text-2xl font-bold mb-6 flex items-center gap-3 text-slate-800 dark:text-white">
                 My Impact <span class="material-icons text-primary text-3xl">auto_awesome</span>

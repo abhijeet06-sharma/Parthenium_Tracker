@@ -109,6 +109,12 @@ function updateUI() {
     const verifiedEl = document.getElementById('impact-verified');
     if (verifiedEl) verifiedEl.textContent = verifiedCount;
 
+    // Mobile Stats
+    const totalMobileEl = document.getElementById('impact-total-mobile');
+    if (totalMobileEl) totalMobileEl.textContent = myReports.length;
+    const verifiedMobileEl = document.getElementById('impact-verified-mobile');
+    if (verifiedMobileEl) verifiedMobileEl.textContent = verifiedCount;
+
     // Ranking
     updateRanking(myReports.length);
 
@@ -156,18 +162,25 @@ function updateRanking(count) {
 }
 
 function renderActivity(reports) {
-    const activityContainer = document.getElementById('recent-activity');
-    if (!activityContainer) return;
-    activityContainer.innerHTML = '';
+    const containers = [
+        document.getElementById('recent-activity'),
+        document.getElementById('recent-activity-mobile')
+    ];
 
-    if (reports.length === 0) {
-        activityContainer.innerHTML = '<p class="text-sm text-slate-500 italic">No recent reports found.</p>';
-        return;
-    }
+    containers.forEach(container => {
+        if (!container) return;
+        container.innerHTML = '';
 
-    reports.slice(0, 5).forEach(report => {
-        const card = createReportCard(report, true);
-        activityContainer.appendChild(card);
+        if (reports.length === 0) {
+            container.innerHTML = '<p class="text-sm text-slate-500 italic">No recent reports found.</p>';
+            return;
+        }
+
+        reports.slice(0, 5).forEach(report => {
+            const card = createReportCard(report, true);
+            // We need to clone the card because appendChild moves it
+            container.appendChild(card.cloneNode(true));
+        });
     });
 }
 
