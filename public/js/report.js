@@ -34,25 +34,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (confirmLocBtn && sidebar) {
         confirmLocBtn.addEventListener('click', () => {
             // Open bottom sheet
-            sidebar.classList.remove('translate-y-full');
-        });
-    }
-
-    if (closeSidebarBtn && sidebar) {
-        closeSidebarBtn.addEventListener('click', () => {
-            // Close bottom sheet (mob only really)
-            sidebar.classList.add('translate-y-full');
-        });
-    }
-
-    // Sidebar Logic
-    const sidebar = document.getElementById('report-sidebar');
-    const confirmLocBtn = document.getElementById('btn-confirm-loc');
-    const closeSidebarBtn = document.getElementById('close-sidebar-btn');
-
-    if (confirmLocBtn && sidebar) {
-        confirmLocBtn.addEventListener('click', () => {
-            // Open bottom sheet
             sidebar.style.transform = ''; // Clear inline style
             sidebar.classList.remove('translate-y-full');
             // For desktop, ensure it's visible if needed, but md:translate-y-0 handles it
@@ -65,6 +46,13 @@ document.addEventListener('DOMContentLoaded', async () => {
             sidebar.classList.add('translate-y-full');
         });
     }
+
+    // Photo Input Trigger & Camera Logic (from duplicate removal)
+    const dropzone = document.getElementById('photo-dropzone');
+    const fileInput = document.getElementById('photo-input');
+    const openCameraBtn = document.getElementById('btn-open-camera');
+    const cameraModal = document.getElementById('camera-modal');
+    const cameraStream = document.getElementById('camera-stream');
     const captureBtn = document.getElementById('btn-capture-photo');
     const closeCameraBtn = document.getElementById('btn-close-camera');
     const canvas = document.getElementById('camera-canvas');
