@@ -99,27 +99,27 @@
             <a id="nav-map"
                 class="nav-item flex items-center gap-4 p-3.5 rounded-xl bg-primary text-white shadow-lg shadow-primary/25 font-medium cursor-pointer transition-all hover:scale-[1.02]">
                 <span class="material-icons">map</span>
-                <span class="hidden lg:block">Map View</span>
+                <span>Map View</span>
             </a>
             <a id="nav-reports"
                 class="nav-item flex items-center gap-4 p-3 rounded-xl text-slate-500 hover:bg-slate-100 dark:hover:bg-emerald-900/40 transition-colors cursor-pointer">
                 <span class="material-icons">assignment</span>
-                <span class="hidden lg:block">My Reports</span>
+                <span>My Reports</span>
             </a>
             <a id="nav-impact"
                 class="nav-item flex items-center gap-4 p-3 rounded-xl text-slate-500 hover:bg-slate-100 dark:hover:bg-emerald-900/40 transition-colors cursor-pointer">
                 <span class="material-icons">insights</span>
-                <span class="hidden lg:block">My Impact</span>
+                <span>My Impact</span>
             </a>
             <a id="nav-education"
                 class="nav-item flex items-center gap-4 p-3 rounded-xl text-slate-500 hover:bg-slate-100 dark:hover:bg-emerald-900/40 transition-colors cursor-pointer">
                 <span class="material-icons">school</span>
-                <span class="hidden lg:block">Education</span>
+                <span>Education</span>
             </a>
             <a id="nav-community"
                 class="nav-item flex items-center gap-4 p-3 rounded-xl text-slate-500 hover:bg-slate-100 dark:hover:bg-emerald-900/40 transition-colors cursor-pointer">
                 <span class="material-icons">groups</span>
-                <span class="hidden lg:block">Community</span>
+                <span>Community</span>
             </a>
         </nav>
         <div class="p-4 mt-auto">
@@ -200,33 +200,73 @@
 
         <!-- View: Education -->
         <div id="view-education"
-            class="view-section hidden absolute inset-0 bg-slate-50 dark:bg-slate-900 p-8 overflow-y-auto">
+            class="view-section hidden absolute inset-0 bg-slate-50 dark:bg-slate-900 px-8 pb-8 pt-32 overflow-y-auto">
             <h2 class="text-3xl font-bold mb-6">Education Resources</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm">
-                    <h3 class="font-bold text-xl mb-3">Identifying Parthenium</h3>
-                    <p class="text-slate-600 dark:text-slate-400 mb-4">Learn how to distinguish Parthenium hysterophorus
-                        from look-alike plants.</p>
-                    <button class="text-primary font-bold">Read Guide</button>
+                <!-- Guide Card -->
+                <div
+                    class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700">
+                    <div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
+                        <span class="material-icons text-primary">menu_book</span>
+                    </div>
+                    <h3 class="font-bold text-xl mb-2">Identifying Parthenium</h3>
+                    <p class="text-slate-600 dark:text-slate-400 mb-4 text-sm leading-relaxed">
+                        Parthenium hysterophorus is characterized by deep-lobed leaves and small white flowers.
+                        It often causes contact dermatitis in humans and is toxic to livestock.
+                    </p>
+                    <a href="#" class="text-primary font-bold text-sm flex items-center gap-1 hover:underline">
+                        Read Identification Guide <span class="material-icons text-sm">arrow_forward</span>
+                    </a>
                 </div>
-                <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm">
-                    <h3 class="font-bold text-xl mb-3">Safe Removal</h3>
-                    <p class="text-slate-600 dark:text-slate-400 mb-4">Safety protocols for removing infestations
-                        without spreading spores.</p>
-                    <button class="text-primary font-bold">Download PDF</button>
+
+                <!-- Removal Card -->
+                <div
+                    class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700">
+                    <div
+                        class="w-12 h-12 bg-red-100 dark:bg-red-900/20 rounded-lg flex items-center justify-center mb-4">
+                        <span class="material-icons text-red-500">healing</span>
+                    </div>
+                    <h3 class="font-bold text-xl mb-2">Safe Removal Protocols</h3>
+                    <p class="text-slate-600 dark:text-slate-400 mb-4 text-sm leading-relaxed">
+                        wear protective gloves and masks. Uproot the plant before flowering to prevent pollen spread.
+                        Dispose of by composting in a deep pit or burning (with caution).
+                    </p>
+                    <a href="#" class="text-red-500 font-bold text-sm flex items-center gap-1 hover:underline">
+                        Download Safety PDF <span class="material-icons text-sm">download</span>
+                    </a>
+                </div>
+
+                <!-- External Links -->
+                <div
+                    class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 md:col-span-2">
+                    <h3 class="font-bold text-lg mb-4">External Resources</h3>
+                    <div class="space-y-3">
+                        <a href="https://en.wikipedia.org/wiki/Parthenium_hysterophorus" target="_blank"
+                            class="flex items-center justify-between p-3 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors group">
+                            <span class="text-slate-700 dark:text-slate-300 font-medium">Wikipedia: Parthenium
+                                hysterophorus</span>
+                            <span class="material-icons text-slate-400 group-hover:text-primary">open_in_new</span>
+                        </a>
+                        <a href="https://www.cabi.org/isc/datasheet/45573" target="_blank"
+                            class="flex items-center justify-between p-3 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors group">
+                            <span class="text-slate-700 dark:text-slate-300 font-medium">CABI Invasive Species
+                                Compendium</span>
+                            <span class="material-icons text-slate-400 group-hover:text-primary">open_in_new</span>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
 
         <!-- View: Community -->
         <div id="view-community"
-            class="view-section hidden absolute inset-0 bg-slate-50 dark:bg-slate-900 p-8 overflow-y-auto">
+            class="view-section hidden absolute inset-0 bg-slate-50 dark:bg-slate-900 px-8 pb-8 pt-32 overflow-y-auto">
             <h2 class="text-3xl font-bold mb-6">Community Hub</h2>
             <p class="text-slate-500">Connect with other EcoGuardians in your area.</p>
         </div>
         <!-- View: My Reports -->
         <div id="view-reports"
-            class="view-section hidden absolute inset-0 bg-slate-50 dark:bg-slate-900 p-8 overflow-y-auto">
+            class="view-section hidden absolute inset-0 bg-slate-50 dark:bg-slate-900 px-8 pb-8 pt-32 overflow-y-auto">
             <h2 class="text-3xl font-bold mb-6">My Reports</h2>
             <div id="reports-list-container" class="space-y-4">
                 <p class="text-slate-500">Loading reports...</p>
@@ -242,7 +282,7 @@
 
         <!-- View: Impact -->
         <div id="view-impact"
-            class="view-section hidden absolute inset-0 bg-slate-50 dark:bg-slate-900 p-8 overflow-y-auto">
+            class="view-section hidden absolute inset-0 bg-slate-50 dark:bg-slate-900 px-8 pb-8 pt-32 overflow-y-auto">
             <h2 class="text-3xl font-bold mb-6">My Impact</h2>
 
             <!-- Mobile Stats Cards (Mirrors sidebar content) -->
