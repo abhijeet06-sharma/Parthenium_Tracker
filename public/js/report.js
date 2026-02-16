@@ -9,6 +9,23 @@ let geocoder;
 document.addEventListener('DOMContentLoaded', async () => {
     initMap();
 
+    // Mobile Menu Toggle
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+
+    if (mobileMenuBtn && mobileMenu) {
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('translate-x-full');
+        });
+
+        // Close menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!mobileMenu.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
+                mobileMenu.classList.add('translate-x-full');
+            }
+        });
+    }
+
     // Photo Input Trigger & Camera Logic
     const dropzone = document.getElementById('photo-dropzone');
     const fileInput = document.getElementById('photo-input');

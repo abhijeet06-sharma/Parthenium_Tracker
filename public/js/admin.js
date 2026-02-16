@@ -12,6 +12,7 @@ let currentReportId = null;
 
 document.addEventListener('DOMContentLoaded', async () => {
     setupNavigation();
+    setupSidebar();
     setupLogout();
     setupSearch();
     setupModal();
@@ -412,6 +413,36 @@ async function initMap(reports) {
             map: map,
             position: { lat: report.latitude, lng: report.longitude },
             title: report.status
+        });
+    });
+}
+
+function setupSidebar() {
+    const sidebar = document.getElementById('admin-sidebar');
+    const toggleBtn = document.getElementById('sidebar-toggle-btn');
+    const closeBtn = document.getElementById('sidebar-close-btn');
+    const overlay = document.createElement('div');
+    overlay.className = 'fixed inset-0 bg-black/50 z-40 hidden lg:hidden glass-overlay';
+    document.body.appendChild(overlay);
+
+    function openSidebar() {
+        sidebar.classList.remove('-translate-x-full');
+        overlay.classList.remove('hidden');
+    }
+
+    function closeSidebar() {
+        sidebar.classList.add('-translate-x-full');
+        overlay.classList.add('hidden');
+    }
+
+    if (toggleBtn) toggleBtn.addEventListener('click', openSidebar);
+    if (closeBtn) closeBtn.addEventListener('click', closeSidebar);
+    if (overlay) overlay.addEventListener('click', closeSidebar);
+
+    // Close on nav click
+    document.querySelectorAll('.nav-item').forEach(item => {
+        item.addEventListener('click', () => {
+            if (window.innerWidth < 1024) closeSidebar();
         });
     });
 }

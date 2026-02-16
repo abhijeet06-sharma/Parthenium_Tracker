@@ -13,6 +13,16 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
         rel="stylesheet" />
+    <link rel="manifest" href="/manifest.json">
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(reg => console.log('Service Worker registered'))
+                    .catch(err => console.log('Service Worker registration failed:', err));
+            });
+        }
+    </script>
     <script id="tailwind-config">
         tailwind.config = {
             darkMode: "class",
@@ -70,7 +80,10 @@
             <a class="text-sm font-medium hover:text-primary transition-colors" href="#">Resources</a>
         </nav>
         <div class="flex items-center gap-4">
-            <button class="p-2 rounded-full hover:bg-primary/10 transition-colors">
+            <button id="mobile-menu-btn" class="md:hidden p-2 text-slate-600 dark:text-slate-300">
+                <span class="material-icons">menu</span>
+            </button>
+            <button class="p-2 rounded-full hover:bg-primary/10 transition-colors hidden md:block">
                 <span class="material-icons text-slate-600 dark:text-slate-300">notifications</span>
             </button>
             <div class="w-10 h-10 rounded-full bg-primary/20 border-2 border-primary p-0.5">
@@ -80,6 +93,17 @@
             </div>
         </div>
     </header>
+
+    <!-- Mobile Menu -->
+    <div id="mobile-menu"
+        class="fixed inset-0 z-40 bg-white dark:bg-background-dark transform translate-x-full transition-transform duration-300 md:hidden flex flex-col pt-20 px-6">
+        <a class="py-4 text-lg font-medium border-b border-slate-100 dark:border-slate-800"
+            href="/dashboard.html">Dashboard</a>
+        <a class="py-4 text-lg font-bold text-primary border-b border-slate-100 dark:border-slate-800" href="#">Report
+            Plant</a>
+        <a class="py-4 text-lg font-medium border-b border-slate-100 dark:border-slate-800" href="#">Community</a>
+        <a class="py-4 text-lg font-medium border-b border-slate-100 dark:border-slate-800" href="#">Resources</a>
+    </div>
     <!-- Main Content Area (Map Background) -->
     <main class="relative w-full h-screen pt-20">
         <!-- Interactive Map Background -->

@@ -15,6 +15,16 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
         rel="stylesheet" />
+    <link rel="manifest" href="/manifest.json">
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(reg => console.log('Service Worker registered'))
+                    .catch(err => console.log('Service Worker registration failed:', err));
+            });
+        }
+    </script>
     <script id="tailwind-config">
         tailwind.config = {
             darkMode: "class",
@@ -77,13 +87,36 @@
                     <a class="text-sm font-semibold hover:text-primary transition-colors" href="#">Health Risks</a>
                     <a class="text-sm font-semibold hover:text-primary transition-colors" href="#">About Us</a>
                 </div>
-                <div class="flex items-center gap-4">
+                <!-- Mobile Menu Button -->
+                <button id="mobile-menu-btn"
+                    class="md:hidden p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+                    <span class="material-icons text-2xl text-slate-800 dark:text-white">menu</span>
+                </button>
+                <div class="hidden md:flex items-center gap-4">
                     <a href="/login.html"
                         class="bg-primary text-white px-7 py-3 rounded-full font-bold text-sm hover:bg-primary-dark transition-all shadow-lg shadow-primary/25 active:scale-95 flex items-center transform hover:-translate-y-0.5">
                         REPORT NOW
                     </a>
                 </div>
             </div>
+            <!-- Mobile Menu Dropdown -->
+            <div id="mobile-menu"
+                class="hidden md:hidden absolute top-20 left-0 w-full bg-white dark:bg-slate-900 border-b border-primary/10 shadow-xl p-4 flex flex-col gap-4 animate-fade-in z-50">
+                <a class="text-sm font-semibold p-3 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg hover:text-primary transition-colors"
+                    href="#">How it Works</a>
+                <a class="text-sm font-semibold p-3 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg hover:text-primary transition-colors"
+                    href="#">Leaderboard</a>
+                <a class="text-sm font-semibold p-3 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg hover:text-primary transition-colors"
+                    href="#">Health Risks</a>
+                <a class="text-sm font-semibold p-3 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg hover:text-primary transition-colors"
+                    href="#">About Us</a>
+                <hr class="border-slate-100 dark:border-slate-800">
+                <a href="/login.html"
+                    class="bg-primary text-white p-4 rounded-xl font-bold text-center shadow-lg shadow-primary/20">
+                    REPORT NOW
+                </a>
+            </div>
+        </div>
         </div>
     </nav>
     <!-- Hero Section -->
