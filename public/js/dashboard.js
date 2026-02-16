@@ -31,16 +31,18 @@ function setupInstallPrompt() {
     const installBtn = document.getElementById('nav-install');
 
     // Check if app is already installed
+    // Note: window.navigator.standalone is for iOS legacy
     const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
 
-    // Always show button on mobile/tablet if not installed
+    // Always show button on mobile/tablet if the button exists and app is NOT in standalone mode
     if (installBtn && !isStandalone) {
+        // Force visibility
         installBtn.classList.remove('hidden');
         installBtn.classList.add('flex');
 
         installBtn.addEventListener('click', () => {
             if (deferredPrompt) {
-                // Show the native prompt
+                // Show the native prompt if available
                 deferredPrompt.prompt();
                 deferredPrompt.userChoice.then((choiceResult) => {
                     if (choiceResult.outcome === 'accepted') {
@@ -51,31 +53,27 @@ function setupInstallPrompt() {
                     deferredPrompt = null;
                 });
             } else {
-                // Manual Instructions
+                // Fallback Manual Instructions
                 alert("To install the app:\n\n1. Tap the Share icon (iOS) or Menu icon (Android)\n2. Select 'Add to Home Screen'");
             }
         });
     }
 
+    // Capture the event for later use
     window.addEventListener('beforeinstallprompt', (e) => {
-        // Prevent Chrome 67 and earlier from automatically showing the prompt
         e.preventDefault();
-        // Stash the event so it can be triggered later.
         deferredPrompt = e;
+        console.log('beforeinstallprompt fired');
     });
 
-    // Optionally handle appinstalled event
+    // Handle successful installation
     window.addEventListener('appinstalled', () => {
         console.log('PWA was installed');
-        if (installBtn) installBtn.classList.add('hidden');
+        if (installBtn) {
+            installBtn.classList.add('hidden');
+            installBtn.classList.remove('flex');
+        }
     });
-}
-
-// Optionally handle appinstalled event
-window.addEventListener('appinstalled', () => {
-    console.log('PWA was installed');
-    if (installBtn) installBtn.classList.add('hidden');
-});
 }
 
 function setupLogout() {
