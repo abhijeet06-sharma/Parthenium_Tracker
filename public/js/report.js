@@ -26,6 +26,25 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     }
 
+    // Sidebar Logic
+    const sidebar = document.getElementById('report-sidebar');
+    const confirmLocBtn = document.getElementById('btn-confirm-loc');
+    const closeSidebarBtn = document.getElementById('close-sidebar-btn');
+
+    if (confirmLocBtn && sidebar) {
+        confirmLocBtn.addEventListener('click', () => {
+            // Open bottom sheet
+            sidebar.classList.remove('translate-y-full');
+        });
+    }
+
+    if (closeSidebarBtn && sidebar) {
+        closeSidebarBtn.addEventListener('click', () => {
+            // Close bottom sheet (mob only really)
+            sidebar.classList.add('translate-y-full');
+        });
+    }
+
     // Photo Input Trigger & Camera Logic
     const dropzone = document.getElementById('photo-dropzone');
     const fileInput = document.getElementById('photo-input');
