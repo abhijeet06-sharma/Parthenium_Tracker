@@ -108,9 +108,12 @@
     <main class="relative w-full h-screen pt-20">
         <!-- Interactive Map Background -->
         <div class="absolute inset-0 z-0">
-            <div id="report-map" class="relative w-full h-full bg-slate-200 dark:bg-slate-900">
-                <!-- Map UI Elements -->
-                <div class="absolute inset-0 pointer-events-none">
+            <!-- Wrapper for Map and Overlay Controls -->
+            <div class="relative w-full h-full">
+                <div id="report-map" class="relative w-full h-full bg-slate-200 dark:bg-slate-900 z-0"></div>
+
+                <!-- Map UI Elements (Now siblings of map to persist) -->
+                <div class="absolute inset-0 pointer-events-none z-10">
                     <!-- Centered Target Crosshair -->
                     <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none">
                         <div class="relative flex items-center justify-center">
@@ -119,6 +122,7 @@
                         </div>
                     </div>
                 </div>
+
                 <!-- Map Controls -->
                 <div class="absolute bottom-28 left-6 flex flex-col gap-2 md:bottom-10 z-30">
                     <button id="btn-locate-me"
